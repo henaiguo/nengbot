@@ -5,13 +5,12 @@
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
 
-#include "lcd1602.h"
+#include <lcd_monitor/lcd1602.h>
 
 #include <unistd.h>
 #include <iostream>
 
 namespace LCDMonitor {
-namespace LCD1602 {
 /// Device name
 #define LCD_I2C_DEVICE_NAME "/dev/i2c-2"
 
@@ -68,11 +67,9 @@ namespace LCD1602 {
 
 /// Register select bit
 #define Rs 0B00000001
-} // namespace LCD1602
 } // namespace LCDMonitor
 
 namespace LCDMonitor {
-namespace LCD1602 {
 ///////////////////////////////////////////////////////////
 /// @brief		Default constructor
 /// @return		None
@@ -143,7 +140,7 @@ void LCD1602::Finalize()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Finalize
+/// @brief		Display message on screen
 /// @param[in]	_msg Message to display
 /// @param[in]	_line line number to display
 /// @retval		true
@@ -278,5 +275,4 @@ bool LCD1602::i2cSendByte(uint8_t _byte)
     ::usleep(1000); // 1ms
     return true;
 }
-} // namespace LCD1602
 } // namespace LCDMonitor

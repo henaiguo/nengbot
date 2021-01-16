@@ -5,7 +5,7 @@
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
 
-#include "i2c.h"
+#include <common_library/i2c.h>
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -14,7 +14,6 @@
 #include <iostream>
 
 namespace CommonLibrary {
-namespace IO {
 ///////////////////////////////////////////////////////////
 /// @brief		Default constructor
 /// @return		None
@@ -361,5 +360,4 @@ bool I2C::SendBytes(const uint8_t* _data, size_t _count)
 
 	return true;
 }
-} // namespace IO
 } // namespace CommonLibrary

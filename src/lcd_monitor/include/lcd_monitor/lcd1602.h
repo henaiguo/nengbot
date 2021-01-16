@@ -7,11 +7,10 @@
 #ifndef LCD1602_H
 #define LCD1602_H
 
-#include "i_lcd_control.h"
-#include "i2c.h"
+#include <lcd_monitor/i_lcd_control.h>
+#include <common_library/i2c.h>
 
 namespace LCDMonitor {
-namespace LCD1602 {
 ///////////////////////////////////////////////////////////
 /// @class LCD1602
 /// @brief lcd1602 display based on i2c
@@ -50,7 +49,7 @@ public:
     virtual void Finalize();
 
     ///////////////////////////////////////////////////////////
-	/// @brief		Finalize
+	/// @brief		Display message on screen
     /// @param[in]	_msg Message to display
     /// @param[in]	_line line number to display
     /// @retval		true
@@ -76,7 +75,7 @@ public:
 
 private:
     /// i2c driver
-    CommonLibrary::IO::I2C m_i2c;
+    CommonLibrary::I2C m_i2c;
 
     /// Backlight
     uint8_t m_backlight;
@@ -126,7 +125,6 @@ private:
 	///////////////////////////////////////////////////////////
     bool i2cSendByte(uint8_t _byte);
 };
-} // namespace LCD1602
 } // namespace LCDMonitor
 
 #endif

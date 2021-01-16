@@ -12,7 +12,6 @@
 #include <string>
 
 namespace CommonLibrary {
-namespace IO {
 ///////////////////////////////////////////////////////////
 /// @class I2C
 /// @brief i2c driver
@@ -180,7 +179,6 @@ private:
     /// I2C device address
     uint8_t m_devAddr;
 };
-} // namespace IO
 } // namespace CommonLibrary
 
 #endif

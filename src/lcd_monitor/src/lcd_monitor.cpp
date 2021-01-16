@@ -1,36 +1,56 @@
+
 ///////////////////////////////////////////////////////////
-/// @file	i_lcd_control.h
-/// @brief	Interface of lcd control
+/// @file	lcd_monitor.cpp
+/// @brief	lcd monitor
 /// @author	henaiguo
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
-#ifndef I_LCD_CONTROL_H
-#define I_LCD_CONTROL_H
 
-#include <string>
+#include <lcd_monitor/lcd_monitor.h>
+#include <lcd_monitor/lcd1602.h>
 
-namespace LCDMonitor{
-///////////////////////////////////////////////////////////
-/// @class ILCDControl
-/// @brief Interface of lcd control
-/// @note
-///////////////////////////////////////////////////////////
-class ILCDControl {
-public:
+namespace LCDMonitor {
+    ///////////////////////////////////////////////////////////
+    /// @brief		Default constructor
+    /// @return		None
+    /// @note
+    ///////////////////////////////////////////////////////////
+    LCDMonitor::LCDMonitor()
+    {
+        m_lcdControl = new LCD1602();
+    }
+
+    ///////////////////////////////////////////////////////////
+	/// @brief		Destructor
+	/// @return		None
+	/// @note
+	///////////////////////////////////////////////////////////
+    LCDMonitor::~LCDMonitor()
+    {
+        Finalize();
+    }
+
     ///////////////////////////////////////////////////////////
     /// @brief		Initialize
     /// @retval		true
     /// @retval		false
     /// @note
     ///////////////////////////////////////////////////////////
-    virtual bool Initialize() = 0;
+    bool LCDMonitor::Initialize()
+    {
+        return m_lcdControl->Initialize();
+    }
 
     ///////////////////////////////////////////////////////////
 	/// @brief		Finalize
 	/// @return		None
 	/// @note
 	///////////////////////////////////////////////////////////
-    virtual void Finalize() = 0;
+    void LCDMonitor::Finalize()
+    {
+        m_lcdControl->Finalize();
+        delete m_lcdControl;
+    }
 
     ///////////////////////////////////////////////////////////
 	/// @brief		Display message on screen
@@ -40,23 +60,18 @@ public:
     /// @retval		false
 	/// @note
 	///////////////////////////////////////////////////////////
-    virtual bool Display(std::string _msg, int _line) = 0;
+    bool LCDMonitor::Display(std::string _msg, int _line)
+    {
+        return m_lcdControl->Display(_msg, _line);
+    }
 
     ///////////////////////////////////////////////////////////
 	/// @brief		Clear screen
 	/// @return		None
 	/// @note
 	///////////////////////////////////////////////////////////
-    virtual void Clear() = 0;
-
-    ///////////////////////////////////////////////////////////
-	/// @brief		Backlight on or off
-    /// @param[in]	_onoff switch of backlight
-	/// @return		None
-	/// @note
-	///////////////////////////////////////////////////////////
-    virtual void Backlight(bool _onoff) = 0;
-};
+    void LCDMonitor::Clear()
+    {
+        return m_lcdControl->Clear();
+    }
 } // namespace LCDMonitor
-
-#endif
