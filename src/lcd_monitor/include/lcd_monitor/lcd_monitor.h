@@ -49,13 +49,13 @@ public:
 
     ///////////////////////////////////////////////////////////
 	/// @brief		Display message on screen
-    /// @param[in]	_msg Message to display
+    /// @param[in]	_message Message to display
     /// @param[in]	_line line number to display
     /// @retval		true
     /// @retval		false
 	/// @note
 	///////////////////////////////////////////////////////////
-    bool Display(std::string _msg, int _line);
+    bool Display(std::string _message, int _line);
 
     ///////////////////////////////////////////////////////////
 	/// @brief		Clear screen

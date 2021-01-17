@@ -7,7 +7,7 @@
 ///////////////////////////////////////////////////////////
 
 #include <lcd_monitor/lcd_monitor.h>
-#include <lcd_monitor/lcd1602.h>
+#include <lcd_monitor/lcd_1602.h>
 
 namespace LCDMonitor {
     ///////////////////////////////////////////////////////////
@@ -54,15 +54,15 @@ namespace LCDMonitor {
 
     ///////////////////////////////////////////////////////////
 	/// @brief		Display message on screen
-    /// @param[in]	_msg Message to display
+    /// @param[in]	_message message to display
     /// @param[in]	_line line number to display
     /// @retval		true
     /// @retval		false
 	/// @note
 	///////////////////////////////////////////////////////////
-    bool LCDMonitor::Display(std::string _msg, int _line)
+    bool LCDMonitor::Display(std::string _message, int _line)
     {
-        return m_lcdControl->Display(_msg, _line);
+        m_lcdControl->Display(_message, _line);
     }
 
     ///////////////////////////////////////////////////////////

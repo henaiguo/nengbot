@@ -9,7 +9,7 @@ project(lcd_monitor)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  std_msgs
+  neng_msgs
   common_library
 )
 
@@ -105,7 +105,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES lcd_monitor
-  CATKIN_DEPENDS roscpp std_msgs common_library
+  CATKIN_DEPENDS roscpp neng_msgs common_library
   #  DEPENDS system_lib
 )
 
@@ -123,7 +123,7 @@ include_directories(
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
   src/lcd_monitor.cpp
-  src/lcd1602.cpp
+  src/lcd_1602.cpp
 )
 
 ## Add cmake target dependencies of the library
