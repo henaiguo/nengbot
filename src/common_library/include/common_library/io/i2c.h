@@ -11,8 +11,8 @@
 #include <stdlib.h>
 #include <string>
 
-namespace CommonLibrary {
-namespace IO {
+namespace common_library {
+namespace io {
 ///////////////////////////////////////////////////////////
 /// @class I2C
 /// @brief i2c driver
@@ -176,11 +176,8 @@ public:
 private:
     /// I2C device fd
     int m_fd;
-
-    /// I2C device address
-    uint8_t m_devAddr;
 };
-} // namespace IO
-} // namespace CommonLibrary
+} // namespace io
+} // namespace common_library
 
 #endif // I2C_H

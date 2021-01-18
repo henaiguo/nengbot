@@ -8,7 +8,7 @@
 #include <lcd_monitor/lcd_monitor.h>
 #include <ros/ros.h>
 
-using namespace LCDMonitor;
+using namespace lcd_monitor;
 
 int main(int argc, char** argv)
 {
@@ -16,12 +16,11 @@ int main(int argc, char** argv)
     
     LCDMonitor lcdMonitor;
     if (!lcdMonitor.Initialize()) {
-        ROS_ERROR("");
         lcdMonitor.Finalize();
         return 1;
     }
 
-    ROS_INFO("");
+    ROS_INFO("lcd_monitor_node init success");
     ros::spin();
     return 0;
 }

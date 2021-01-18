@@ -9,8 +9,9 @@
 
 #include <unistd.h>
 #include <iostream>
+#include <ros/ros.h>
 
-namespace LCDMonitor {
+namespace lcd_monitor {
 /// Device name
 #define LCD_I2C_DEVICE_NAME "/dev/i2c-2"
 
@@ -67,9 +68,9 @@ namespace LCDMonitor {
 
 /// Register select bit
 #define Rs 0B00000001
-} // namespace LCDMonitor
+} // namespace lcd_monitor
 
-namespace LCDMonitor {
+namespace lcd_monitor {
 ///////////////////////////////////////////////////////////
 /// @brief		Default constructor
 /// @return		None
@@ -121,7 +122,7 @@ bool LCD1602::Initialize()
     } while (false);
     
     if (!res) {
-        std::cout << "Failed in Initialize" << std::endl;
+        ROS_ERROR("LCD1602 initialize failed");
         return false;
     }
     return true;
@@ -157,7 +158,7 @@ bool LCD1602::Display(std::string _msg, int _line)
         position = 0x40;
     }
     else {
-        std::cout << "Error in Display: Invalid _line(" << _line << ")" << std::endl;
+        ROS_ERROR("LCD1602 display failed: invalid _line(%d)", _line);
         return false;
     }
 
@@ -275,4 +276,4 @@ bool LCD1602::i2cSendByte(uint8_t _byte)
     ::usleep(1000); // 1ms
     return true;
 }
-} // namespace LCDMonitor
+} // namespace lcd_monitor

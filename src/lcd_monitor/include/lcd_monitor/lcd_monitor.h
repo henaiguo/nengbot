@@ -8,12 +8,12 @@
 #define LCD_MONITOR_H
 
 #include <lcd_monitor/ilcd_control.h>
-#include <common_library/types/ebaisc_state.h>
+#include <common_library/types/ebasic_state.h>
 
 #include <ros/ros.h>
 #include <neng_msgs/BasicState.h>
 
-namespace LCDMonitor{
+namespace lcd_monitor {
 ///////////////////////////////////////////////////////////
 /// @class LCDMonitor
 /// @brief lcd monitor
@@ -72,8 +72,8 @@ private:
     /// @retval		false
 	/// @note
 	///////////////////////////////////////////////////////////
-    bool displayCurrentState(CommonLibrary::Types::eBaiscState _state);
+    bool displayCurrentState(common_library::types::eBasicState _state);
 };
-} // namespace LCDMonitor
+} // namespace lcd_monitor
 
 #endif // LCD_MONITOR_H

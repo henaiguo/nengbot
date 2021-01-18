@@ -11,9 +11,9 @@
 
 #include <sstream>
 
-using namespace CommonLibrary::Types;
+using namespace common_library::types;
 
-namespace LCDMonitor {
+namespace lcd_monitor {
 ///////////////////////////////////////////////////////////
 /// @brief		Default constructor
 /// @return		None
@@ -48,7 +48,7 @@ bool LCDMonitor::Initialize()
     }
 
     ros::NodeHandle n;
-    m_basicStateSub = n.subscribe("/basic_state", 10, basicStateCallback);
+    m_basicStateSub = n.subscribe("/basic_state", 10, &LCDMonitor::basicStateCallback, this);
 
     return true;
 }
@@ -73,7 +73,7 @@ void LCDMonitor::Finalize()
 ///////////////////////////////////////////////////////////
 void LCDMonitor::basicStateCallback(const neng_msgs::BasicState::ConstPtr& _message)
 {
-    displayCurrentState(_message->current_state);
+    displayCurrentState((eBasicState)(_message->current_state));
 }
 
 ///////////////////////////////////////////////////////////
@@ -83,7 +83,7 @@ void LCDMonitor::basicStateCallback(const neng_msgs::BasicState::ConstPtr& _mess
 /// @retval		false
 /// @note
 ///////////////////////////////////////////////////////////
-bool LCDMonitor::displayCurrentState(CommonLibrary::Types::eBaiscState _state)
+bool LCDMonitor::displayCurrentState(common_library::types::eBasicState _state)
 {
     std::string state = ToString(_state);
     if (state == "INVALID_ENUM_VALUE") return false;
@@ -93,4 +93,4 @@ bool LCDMonitor::displayCurrentState(CommonLibrary::Types::eBaiscState _state)
     m_lcdControl->Clear();
     return m_lcdControl->Display(message.str(), 1);
 }
-} // namespace LCDMonitor
+} // namespace lcd_monitor

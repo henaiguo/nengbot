@@ -12,9 +12,10 @@
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
 #include <iostream>
+#include <ros/ros.h>
 
-namespace CommonLibrary {
-namespace IO {
+namespace common_library {
+namespace io {
 ///////////////////////////////////////////////////////////
 /// @brief		Default constructor
 /// @return		None
@@ -48,17 +49,16 @@ bool I2C::Open(std::string _devName, uint8_t _devAddr)
 {
     int fd = ::open(_devName.c_str(), O_RDWR);
     if (fd == INVALID_I2C_FD) {
-        std::cout << "Error in Open: Invalid _name(" << _devName << ")" << std::endl;
+        ROS_ERROR("[I2C]Error in Open: Invalid device name(%s)", _devName.c_str());
         return false;
     }
 
     if (::ioctl(fd, I2C_SLAVE, _devAddr) < 0) {
-        std::cout << "Error in Open: Invalid i2c address(" << _devAddr << ")" << std::endl;
+        ROS_ERROR("[I2C]Error in Open: Invalid i2c address(0x%02x)", _devAddr);
         return false;
     }
 
     m_fd = fd;
-    m_devAddr = _devAddr;
     return true;
 }
 
@@ -120,21 +120,21 @@ bool I2C::ReadByte(uint8_t _regAddr, uint8_t* _data)
 bool I2C::ReadBytes(uint8_t _regAddr, size_t _count, uint8_t* _data)
 {
     if (!IsOpen()) {
-        std::cout << "Error in ReadBytes: Device hasn't open yet" << std::endl;
+        ROS_ERROR("[I2C]Error in ReadBytes: Device hasn't open yet");
         return false;
     } 
 
     // Write register to device
     int ret = ::write(m_fd, &_regAddr, 1);
     if (ret != 1) {
-        std::cout << "Error in ReadBytes: Failed to write to i2c device" << std::endl;
+        ROS_ERROR("[I2C]Error in ReadBytes: Failed to write to i2c device");
         return false;
     }
 
     // Then read the response
     ret = ::read(m_fd, _data, _count);
     if (ret != _count) {
-        std::cout << "Error in ReadBytes: Received " << ret << " bytes from device(expected " << _count << ")" << std::endl;
+        ROS_ERROR("[I2C]Error in ReadBytes: Received %d bytes from device(expected %d)", ret, _count);
         return false;
     }
 
@@ -166,14 +166,14 @@ bool I2C::ReadWord(uint8_t _regAddr, uint16_t* _data)
 bool I2C::ReadWords(uint8_t _regAddr, size_t _count, uint16_t* _data)
 {
     if (!IsOpen()) {
-        std::cout << "Error in ReadWords: Device hasn't open yet" << std::endl;
+        ROS_ERROR("[I2C]Error in ReadWords: Device hasn't open yet");
         return false;
     }
     
     // Write register to device
     int ret = ::write(m_fd, &_regAddr, 1);
     if (ret != 1) {
-        std::cout << "Error in ReadBytes: Failed to write to i2c device" << std::endl;
+        ROS_ERROR("[I2C]Error in ReadWords: Failed to write to i2c device");
         return false;
     }
 
@@ -181,7 +181,7 @@ bool I2C::ReadWords(uint8_t _regAddr, size_t _count, uint16_t* _data)
     char buf[_count*2];
 	ret = read(m_fd, buf, _count*2);
 	if (ret != (signed)(_count*2)) {
-        std::cout << "Error in ReadWords: Received " << ret << " bytes from device(expected " << _count*2 << ")" << std::endl;
+        ROS_ERROR("[I2C]Error in ReadWords: Received %d bytes from device(expected %d)", ret, _count);
 		return false;
 	}
 
@@ -204,7 +204,7 @@ bool I2C::ReadWords(uint8_t _regAddr, size_t _count, uint16_t* _data)
 bool I2C::WriteByte(uint8_t _regAddr, uint8_t _data)
 {
     if (!IsOpen()) {
-        std::cout << "Error in WriteByte: Device hasn't open yet" << std::endl;
+        ROS_ERROR("[I2C]Error in WriteByte: Device hasn't open yet");
         return false;
     }
 
@@ -216,7 +216,7 @@ bool I2C::WriteByte(uint8_t _regAddr, uint8_t _data)
 	// Write the bytes
     int ret = ::write(m_fd, writeData, 2);
 	if (ret != 2) {
-        std::cout << "Error in WriteByte: Received " << ret << " bytes from device(expected " << 2 << ")" << std::endl;
+        ROS_ERROR("[I2C]Error in WriteByte: Wrote %d bytes to device(expected 2)", ret);
 		return false;
 	}
     
@@ -235,7 +235,7 @@ bool I2C::WriteByte(uint8_t _regAddr, uint8_t _data)
 bool I2C::WriteBytes(uint8_t _regAddr, const uint8_t* _data, size_t _count)
 {
     if (!IsOpen()) {
-        std::cout << "Error in WriteBytes: Device hasn't open yet" << std::endl;
+        ROS_ERROR("[I2C]Error in WriteBytes: Device hasn't open yet");
         return false;
     }
 
@@ -250,7 +250,7 @@ bool I2C::WriteBytes(uint8_t _regAddr, const uint8_t* _data, size_t _count)
 	// send the bytes
     int ret = ::write(m_fd, writeData, _count+1);
 	if (ret != (signed)(_count+1)) {
-        std::cout << "Error in WriteByte: Wrote " << ret << " bytes(expected " << _count+1 << ")" << std::endl;
+        ROS_ERROR("[I2C]Error in WriteBytes: Write returned %d (expected %d)", ret, _count);
 		return false;
     }
 
@@ -269,7 +269,7 @@ bool I2C::WriteBytes(uint8_t _regAddr, const uint8_t* _data, size_t _count)
 bool I2C::WriteWord(uint8_t _regAddr, uint16_t _data)
 {
     if (!IsOpen()) {
-        std::cout << "Error in WriteWord: Device hasn't open yet" << std::endl;
+        ROS_ERROR("[I2C]Error in WriteWord: Device hasn't open yet");
         return false;
     }
     
@@ -282,7 +282,7 @@ bool I2C::WriteWord(uint8_t _regAddr, uint16_t _data)
 
     int ret = ::write(m_fd, writeData, 3);
 	if (ret != 3) {
-        std::cout << "Error in WriteWord: System write returned " << ret << " (expected 3)" << std::endl;
+        ROS_ERROR("[I2C]Error in WriteWord: Write returned %d (expected 3)", ret);
         return false;
     }
     
@@ -301,7 +301,7 @@ bool I2C::WriteWord(uint8_t _regAddr, uint16_t _data)
 bool I2C::WriteWords(uint8_t _regAddr, const uint16_t* _data, size_t _count)
 {
     if (!IsOpen()) {
-        std::cout << "Error in WriteWords: Device hasn't open yet" << std::endl;
+        ROS_ERROR("[I2C]Error in WriteWords: Device hasn't open yet");
         return false;
     }
 
@@ -316,7 +316,7 @@ bool I2C::WriteWords(uint8_t _regAddr, const uint16_t* _data, size_t _count)
 
 	int ret = ::write(m_fd, writeData, (_count*2)+1);
 	if (ret != (signed)(_count*2)+1) {
-        std::cout << "Error in WriteWords: System write returned " << ret << " (expected " << (_count*2)+1 << ")" << std::endl;
+        ROS_ERROR("[I2C]Error in WriteWords: Write returned %d (expected %d)", ret, (_count*2)+1);
 		return false;
 	}
     
@@ -346,7 +346,7 @@ bool I2C::SendByte(uint8_t _data)
 bool I2C::SendBytes(const uint8_t* _data, size_t _count)
 {
     if (!IsOpen()) {
-        std::cout << "Error in SendBytes: Device hasn't open yet" << std::endl;
+        ROS_ERROR("[I2C]Error in SendBytes: Device hasn't open yet");
         return false;
     }
 
@@ -355,11 +355,11 @@ bool I2C::SendBytes(const uint8_t* _data, size_t _count)
 
 	// Write should have returned the correct # bytes written
 	if (ret != (signed)_count){
-        std::cout << "Error in SendBytes: Received " << ret << " bytes from device(expected " << _count << ")" << std::endl;
+        ROS_ERROR("[I2C]Error in SendBytes: Received %d bytes from device(expected %d)", ret, _count);
 		return false;
 	}
 
 	return true;
 }
-} // namespace IO
-} // namespace CommonLibrary
+} // namespace io
+} // namespace common_library

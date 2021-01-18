@@ -10,7 +10,7 @@
 #include <lcd_monitor/ilcd_control.h>
 #include <common_library/io/i2c.h>
 
-namespace LCDMonitor {
+namespace lcd_monitor {
 ///////////////////////////////////////////////////////////
 /// @class LCD1602
 /// @brief lcd1602 display based on i2c
@@ -75,7 +75,7 @@ public:
 
 private:
     /// i2c driver
-    CommonLibrary::IO::I2C m_i2c;
+    common_library::io::I2C m_i2c;
 
     /// Backlight
     uint8_t m_backlight;
@@ -125,6 +125,6 @@ private:
 	///////////////////////////////////////////////////////////
     bool i2cSendByte(uint8_t _byte);
 };
-} // namespace LCDMonitor
+} // namespace lcd_monitor
 
 #endif // LCD1602_H

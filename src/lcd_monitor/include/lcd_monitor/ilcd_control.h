@@ -9,7 +9,7 @@
 
 #include <string>
 
-namespace LCDMonitor{
+namespace lcd_monitor {
 ///////////////////////////////////////////////////////////
 /// @class ILCDControl
 /// @brief Interface of lcd control
@@ -57,6 +57,6 @@ public:
 	///////////////////////////////////////////////////////////
     virtual void Backlight(bool _onoff) = 0;
 };
-} // namespace LCDMonitor
+} // namespace lcd_monitor
 
 #endif // I_LCD_CONTROL_H

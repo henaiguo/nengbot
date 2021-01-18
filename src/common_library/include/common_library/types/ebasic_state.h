@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////
-/// @file	eBaiscState.h
+/// @file	eBasicState.h
 /// @brief	Baisc state type
 /// @author	henaiguo
 /// Copyright (C) 2021- henaiguo. All rights reserved.
@@ -10,14 +10,14 @@
 
 #include <string>
 
-namespace CommonLibrary {
-namespace Types {
+namespace common_library {
+namespace types {
 ///////////////////////////////////////////////////////////
-/// @enum eBaiscState
+/// @enum eBasicState
 /// @brief Baisc state type
 /// @note
 ///////////////////////////////////////////////////////////
-enum eBaiscState
+enum eBasicState
 {
 	eSTATE_IDLE = 0,
 	eSTATE_STAND = 1,
@@ -30,7 +30,7 @@ enum eBaiscState
 /// @return		char*
 /// @note
 ///////////////////////////////////////////////////////////
-static std::string ToString(eBaiscState _enum)
+static std::string ToString(eBasicState _enum)
 {
 	switch (_enum) {
 	case eSTATE_IDLE:
@@ -52,7 +52,7 @@ static std::string ToString(eBaiscState _enum)
 /// @retval		false
 /// @note
 ///////////////////////////////////////////////////////////
-static bool ToEnum(const std::string& _string, eBaiscState& _enum)
+static bool ToEnum(const std::string& _string, eBasicState& _enum)
 {
 	if (_string == "eSTATE_IDLE") {
 		_enum = eSTATE_IDLE;
@@ -77,7 +77,7 @@ static bool ToEnum(const std::string& _string, eBaiscState& _enum)
 /// @retval		false
 /// @note
 ///////////////////////////////////////////////////////////
-static bool ToEnum(int _value, eBaiscState& _enum)
+static bool ToEnum(int _value, eBasicState& _enum)
 {
 	switch (_value) {
 	case eSTATE_IDLE:
@@ -93,7 +93,7 @@ static bool ToEnum(int _value, eBaiscState& _enum)
 		return false;
 	}
 }
-} // namespace Types
-} // namespace CommonLibrary
+} // namespace types
+} // namespace common_library
 
 #endif // EBAISC_STATE_H
