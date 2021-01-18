@@ -7,8 +7,8 @@
 #ifndef LCD1602_H
 #define LCD1602_H
 
-#include <lcd_monitor/i_lcd_control.h>
-#include <common_library/i2c.h>
+#include <lcd_monitor/ilcd_control.h>
+#include <common_library/io/i2c.h>
 
 namespace LCDMonitor {
 ///////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ public:
 
 private:
     /// i2c driver
-    CommonLibrary::I2C m_i2c;
+    CommonLibrary::IO::I2C m_i2c;
 
     /// Backlight
     uint8_t m_backlight;
@@ -127,4 +127,4 @@ private:
 };
 } // namespace LCDMonitor
 
-#endif
+#endif // LCD1602_H

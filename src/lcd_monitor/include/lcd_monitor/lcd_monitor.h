@@ -7,8 +7,11 @@
 #ifndef LCD_MONITOR_H
 #define LCD_MONITOR_H
 
-#include <lcd_monitor/i_lcd_control.h>
-#include <string>
+#include <lcd_monitor/ilcd_control.h>
+#include <common_library/types/ebaisc_state.h>
+
+#include <ros/ros.h>
+#include <neng_msgs/BasicState.h>
 
 namespace LCDMonitor{
 ///////////////////////////////////////////////////////////
@@ -47,27 +50,30 @@ public:
 	///////////////////////////////////////////////////////////
     void Finalize();
 
+private:
+    /// ilcd_control
+    ILCDControl* m_lcdControl;
+
+    /// BasicState subscriber
+    ros::Subscriber m_basicStateSub;
+
+    ///////////////////////////////////////////////////////////
+	/// @brief		Baisc state callback
+    /// @param[in]	_message Message of basic state
+	/// @return		None
+	/// @note
+	///////////////////////////////////////////////////////////
+    void basicStateCallback(const neng_msgs::BasicState::ConstPtr& _message);
+
     ///////////////////////////////////////////////////////////
 	/// @brief		Display message on screen
-    /// @param[in]	_message Message to display
-    /// @param[in]	_line line number to display
+    /// @param[in]	_state Current state to display
     /// @retval		true
     /// @retval		false
 	/// @note
 	///////////////////////////////////////////////////////////
-    bool Display(std::string _message, int _line);
-
-    ///////////////////////////////////////////////////////////
-	/// @brief		Clear screen
-	/// @return		None
-	/// @note
-	///////////////////////////////////////////////////////////
-    void Clear();
-
-private:
-    /// i_lcd_control
-    ILCDControl* m_lcdControl;
+    bool displayCurrentState(CommonLibrary::Types::eBaiscState _state);
 };
 } // namespace LCDMonitor
 
-#endif
+#endif // LCD_MONITOR_H

@@ -120,7 +120,7 @@ include_directories(
 
 ## Declare a C++ library
 add_library(common_library_i2c
-  src/i2c.cpp
+  src/io/i2c.cpp
 )
 
 ## Add cmake target dependencies of the library
