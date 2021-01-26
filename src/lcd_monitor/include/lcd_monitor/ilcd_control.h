@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////
-/// @file	i_lcd_control.h
-/// @brief	Interface of lcd control
-/// @author	henaiguo
+/// @file   i_lcd_control.h
+/// @brief  Interface of lcd control
+/// @author henaiguo
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
 #ifndef I_LCD_CONTROL_H
@@ -18,41 +18,41 @@ namespace lcd_monitor {
 class ILCDControl {
 public:
     ///////////////////////////////////////////////////////////
-    /// @brief		Initialize
-    /// @retval		true
-    /// @retval		false
+    /// @brief  Initialize
+    /// @retval true
+    /// @retval false
     /// @note
     ///////////////////////////////////////////////////////////
     virtual bool Initialize() = 0;
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Finalize
-    /// @return		None
+    /// @brief  Finalize
+    /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
     virtual void Finalize() = 0;
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Display message on screen
-    /// @param[in]	_msg Message to display
-    /// @param[in]	_line line number to display
-    /// @retval		true
-    /// @retval		false
+    /// @brief  Display message on screen
+    /// @param[in]  _msg Message to display
+    /// @param[in]  _line line number to display
+    /// @retval true
+    /// @retval false
     /// @note
     ///////////////////////////////////////////////////////////
     virtual bool Display(std::string _msg, int _line) = 0;
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Clear screen
-    /// @return		None
+    /// @brief  Clear screen
+    /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
     virtual void Clear() = 0;
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Backlight on or off
-    /// @param[in]	_onoff switch of backlight
-    /// @return		None
+    /// @brief  Backlight on or off
+    /// @param[in]  _onoff switch of backlight
+    /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
     virtual void Backlight(bool _onoff) = 0;

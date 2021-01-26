@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////
-/// @file	lcd1602.h
-/// @brief	lcd1602 display based on pcf8574 through i2c
-/// @author	henaiguo
+/// @file   lcd1602.h
+/// @brief  lcd1602 display based on pcf8574 through i2c
+/// @author henaiguo
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
 #ifndef LCD1602_H
@@ -20,55 +20,55 @@ class LCD1602 : public ILCDControl
 {
 public:
     ///////////////////////////////////////////////////////////
-    /// @brief		Default constructor
-    /// @return		None
+    /// @brief  Default constructor
+    /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
     LCD1602();
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Destructor
-    /// @return		None
+    /// @brief  Destructor
+    /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
     virtual ~LCD1602();
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Initialize
-    /// @retval		true
-    /// @retval		false
+    /// @brief  Initialize
+    /// @retval true
+    /// @retval false
     /// @note
     ///////////////////////////////////////////////////////////
     virtual bool Initialize();
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Finalize
-    /// @return		None
+    /// @brief  Finalize
+    /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
     virtual void Finalize();
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Display message on screen
-    /// @param[in]	_msg Message to display
-    /// @param[in]	_line line number to display
-    /// @retval		true
-    /// @retval		false
+    /// @brief  Display message on screen
+    /// @param[in]  _msg Message to display
+    /// @param[in]  _line line number to display
+    /// @retval true
+    /// @retval false
     /// @note
     ///////////////////////////////////////////////////////////
     virtual bool Display(std::string _msg, int _line);
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Clear screen
-    /// @return		None
+    /// @brief  Clear screen
+    /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
     virtual void Clear();
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Backlight on or off
-    /// @param[in]	_onoff switch of backlight
-    /// @return		None
+    /// @brief  Backlight on or off
+    /// @param[in]  _onoff switch of backlight
+    /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
     virtual void Backlight(bool _onoff);
@@ -81,46 +81,46 @@ private:
     uint8_t m_backlight;
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Send command through i2c to lcd1602
-    /// @param[in]	_command Command to send
-    /// @retval		true
-    /// @retval		false
+    /// @brief  Send command through i2c to lcd1602
+    /// @param[in]  _command Command to send
+    /// @retval true
+    /// @retval false
     /// @note
     ///////////////////////////////////////////////////////////
     bool i2cWriteCommand(uint8_t _command);
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Send char value through i2c to lcd1602
-    /// @param[in]	_command Command to send
-    /// @retval		true
-    /// @retval		false
+    /// @brief  Send char value through i2c to lcd1602
+    /// @param[in]  _command Command to send
+    /// @retval true
+    /// @retval false
     /// @note
     ///////////////////////////////////////////////////////////
     bool i2cWriteChar(char _data);
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Send 4 bits through i2c to lcd1602
-    /// @param[in]	_command Command to send
-    /// @retval		true
-    /// @retval		false
+    /// @brief  Send 4 bits through i2c to lcd1602
+    /// @param[in]  _command Command to send
+    /// @retval true
+    /// @retval false
     /// @note
     ///////////////////////////////////////////////////////////
     bool i2cSend4Bits(uint8_t _data);
 
     ///////////////////////////////////////////////////////////
-    /// @brief		i2c plus enable
-    /// @param[in]	_command Command to send
-    /// @retval		true
-    /// @retval		false
-    /// @note       Clocks EN to latch command
+    /// @brief  i2c plus enable
+    /// @param[in]  _command Command to send
+    /// @retval true
+    /// @retval false
+    /// @note   Clocks EN to latch command
     ///////////////////////////////////////////////////////////
     bool i2cPlusEnable(uint8_t _data);
 
     ///////////////////////////////////////////////////////////
-    /// @brief		Send byte through i2c to lcd1602
-    /// @param[in]	_byte Byte to send
-    /// @retval		true
-    /// @retval		false
+    /// @brief  Send byte through i2c to lcd1602
+    /// @param[in]  _byte Byte to send
+    /// @retval true
+    /// @retval false
     /// @note
     ///////////////////////////////////////////////////////////
     bool i2cSendByte(uint8_t _byte);

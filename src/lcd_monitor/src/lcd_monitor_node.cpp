@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////
-/// @file	lcd_monitor_node.cpp
-/// @brief	lcd monitor node
-/// @author	henaiguo
+/// @file   lcd_monitor_node.cpp
+/// @brief  lcd monitor node
+/// @author henaiguo
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
 

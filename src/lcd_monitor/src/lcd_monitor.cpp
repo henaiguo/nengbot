@@ -1,8 +1,8 @@
 
 ///////////////////////////////////////////////////////////
-/// @file	lcd_monitor.cpp
-/// @brief	lcd monitor
-/// @author	henaiguo
+/// @file   lcd_monitor.cpp
+/// @brief  lcd monitor
+/// @author henaiguo
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
 
@@ -15,8 +15,8 @@ using namespace common_library::types;
 
 namespace lcd_monitor {
 ///////////////////////////////////////////////////////////
-/// @brief		Default constructor
-/// @return		None
+/// @brief  Default constructor
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 LCDMonitor::LCDMonitor()
@@ -25,8 +25,8 @@ LCDMonitor::LCDMonitor()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Destructor
-/// @return		None
+/// @brief  Destructor
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 LCDMonitor::~LCDMonitor()
@@ -35,9 +35,9 @@ LCDMonitor::~LCDMonitor()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Initialize
-/// @retval		true
-/// @retval		false
+/// @brief  Initialize
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool LCDMonitor::Initialize()
@@ -54,8 +54,8 @@ bool LCDMonitor::Initialize()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Finalize
-/// @return		None
+/// @brief  Finalize
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 void LCDMonitor::Finalize()
@@ -66,9 +66,9 @@ void LCDMonitor::Finalize()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Baisc state callback
-/// @param[in]	_message Message of basic state
-/// @return		None
+/// @brief  Baisc state callback
+/// @param[in]  _message Message of basic state
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 void LCDMonitor::basicStateCallback(const neng_msgs::BasicState::ConstPtr& _message)
@@ -77,20 +77,19 @@ void LCDMonitor::basicStateCallback(const neng_msgs::BasicState::ConstPtr& _mess
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Display message on screen
-/// @param[in]	_state Current state to display
-/// @retval		true
-/// @retval		false
+/// @brief  Display message on screen
+/// @param[in]  _state Current state to display
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool LCDMonitor::displayCurrentState(common_library::types::eBasicState _state)
 {
     std::string state = ToString(_state);
     if (state == "INVALID_ENUM_VALUE") return false;
-    std::stringstream message;
-    message << "state: " << state;
 
+    ROS_INFO("current basic state: %s", state.c_str());
     m_lcdControl->Clear();
-    return m_lcdControl->Display(message.str(), 1);
+    return m_lcdControl->Display(state.c_str(), 1);
 }
 } // namespace lcd_monitor

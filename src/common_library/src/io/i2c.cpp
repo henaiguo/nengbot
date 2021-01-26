@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////
-/// @file	i2c.cpp
-/// @brief	i2c driver for beaglebone black
-/// @author	henaiguo
+/// @file   i2c.cpp
+/// @brief  i2c driver for beaglebone black
+/// @author henaiguo
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
 
@@ -17,8 +17,8 @@
 namespace common_library {
 namespace io {
 ///////////////////////////////////////////////////////////
-/// @brief		Default constructor
-/// @return		None
+/// @brief  Default constructor
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 I2C::I2C()
@@ -28,8 +28,8 @@ I2C::I2C()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Destructor
-/// @return		None
+/// @brief  Destructor
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 I2C::~I2C()
@@ -38,11 +38,11 @@ I2C::~I2C()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Open i2c device
-/// @param[in]	_devName I2c device name
-/// @param[in]	_devAddr I2c device address
-/// @retval		true
-/// @retval		false
+/// @brief  Open i2c device
+/// @param[in]  _devName I2c device name
+/// @param[in]  _devAddr I2c device address
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool I2C::Open(std::string _devName, uint8_t _devAddr)
@@ -63,8 +63,8 @@ bool I2C::Open(std::string _devName, uint8_t _devAddr)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Close i2c device
-/// @return		None
+/// @brief  Close i2c device
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 void I2C::Close()
@@ -75,9 +75,9 @@ void I2C::Close()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Whether the i2c device is open
-/// @retval		true
-/// @retval		false
+/// @brief  Whether the i2c device is open
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool I2C::IsOpen() const
@@ -86,8 +86,8 @@ bool I2C::IsOpen() const
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Get the FD of the i2c device
-/// @return		int
+/// @brief  Get the FD of the i2c device
+/// @return int
 /// @note
 ///////////////////////////////////////////////////////////
 int I2C::GetFD() const
@@ -96,11 +96,11 @@ int I2C::GetFD() const
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Read a single byte from i2c device
-/// @param[in]	_regAddr Register address
-/// @param[out]	_data Read data
-/// @retval		true
-/// @retval		false
+/// @brief  Read a single byte from i2c device
+/// @param[in]  _regAddr Register address
+/// @param[out] _data Read data
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool I2C::ReadByte(uint8_t _regAddr, uint8_t* _data)
@@ -109,12 +109,12 @@ bool I2C::ReadByte(uint8_t _regAddr, uint8_t* _data)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Read multiple bytes from i2c device
-/// @param[in]	_regAddr Register address
+/// @brief  Read multiple bytes from i2c device
+/// @param[in]  _regAddr Register address
 /// @param[in]  _count Number of bytes to read
-/// @param[out]	_data Read data
-/// @retval		true
-/// @retval		false
+/// @param[out] _data Read data
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool I2C::ReadBytes(uint8_t _regAddr, size_t _count, uint8_t* _data)
@@ -142,11 +142,11 @@ bool I2C::ReadBytes(uint8_t _regAddr, size_t _count, uint8_t* _data)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Read single word from i2c device
-/// @param[in]	_regAddr Register address
-/// @param[out]	_data Read data
-/// @retval		true
-/// @retval		false
+/// @brief  Read single word from i2c device
+/// @param[in]  _regAddr Register address
+/// @param[out] _data Read data
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool I2C::ReadWord(uint8_t _regAddr, uint16_t* _data)
@@ -155,12 +155,12 @@ bool I2C::ReadWord(uint8_t _regAddr, uint16_t* _data)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Read multiple words from i2c device
-/// @param[in]	_regAddr Register address
+/// @brief  Read multiple words from i2c device
+/// @param[in]  _regAddr Register address
 /// @param[in]  _count Number of words to read
-/// @param[out]	_data Read data
-/// @retval		true
-/// @retval		false
+/// @param[out] _data Read data
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool I2C::ReadWords(uint8_t _regAddr, size_t _count, uint16_t* _data)
@@ -179,26 +179,26 @@ bool I2C::ReadWords(uint8_t _regAddr, size_t _count, uint16_t* _data)
 
     // Then read the response
     char buf[_count*2];
-	ret = read(m_fd, buf, _count*2);
-	if (ret != (signed)(_count*2)) {
+    ret = read(m_fd, buf, _count*2);
+    if (ret != (signed)(_count*2)) {
         ROS_ERROR("[I2C]Error in ReadWords: Received %d bytes from device(expected %d)", ret, _count);
-		return false;
-	}
+        return false;
+    }
 
     // Formate words from bytes and put into user's data array
-	for (int i = 0; i < _count; i++) {
-		_data[i] = (((uint16_t)buf[i*2])<<8 | buf[(i*2)+1]);
-	}
+    for (int i = 0; i < _count; i++) {
+        _data[i] = (((uint16_t)buf[i*2])<<8 | buf[(i*2)+1]);
+    }
 
     return true;
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Write a single byte to i2c device
-/// @param[in]	_regAddr Register address
-/// @param[in]	_data Byte to be writen
-/// @retval		true
-/// @retval		false
+/// @brief  Write a single byte to i2c device
+/// @param[in]  _regAddr Register address
+/// @param[in]  _data Byte to be writen
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool I2C::WriteByte(uint8_t _regAddr, uint8_t _data)
@@ -208,28 +208,28 @@ bool I2C::WriteByte(uint8_t _regAddr, uint8_t _data)
         return false;
     }
 
-	// Assemble array to send, starting with the register address
+    // Assemble array to send, starting with the register address
     uint8_t writeData[2];
-	writeData[0] = _regAddr;
-	writeData[1] = _data;
+    writeData[0] = _regAddr;
+    writeData[1] = _data;
 
-	// Write the bytes
+    // Write the bytes
     int ret = ::write(m_fd, writeData, 2);
-	if (ret != 2) {
+    if (ret != 2) {
         ROS_ERROR("[I2C]Error in WriteByte: Wrote %d bytes to device(expected 2)", ret);
-		return false;
-	}
+        return false;
+    }
     
-	return true;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Write multiple bytes to i2c device
-/// @param[in]	_regAddr Register address
-/// @param[in]	_data Bytes to be writen
+/// @brief  Write multiple bytes to i2c device
+/// @param[in]  _regAddr Register address
+/// @param[in]  _data Bytes to be writen
 /// @param[in]  _count Number of bytes to be writen
-/// @retval		true
-/// @retval		false
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool I2C::WriteBytes(uint8_t _regAddr, const uint8_t* _data, size_t _count)
@@ -239,31 +239,31 @@ bool I2C::WriteBytes(uint8_t _regAddr, const uint8_t* _data, size_t _count)
         return false;
     }
 
-	uint8_t writeData[_count+1];
+    uint8_t writeData[_count+1];
 
-	// assemble array to send, starting with the register address
-	writeData[0] = _regAddr;
-	for (int i = 0; i < _count; i++) {
+    // assemble array to send, starting with the register address
+    writeData[0] = _regAddr;
+    for (int i = 0; i < _count; i++) {
         writeData[i+1] = _data[i];
     }
 
-	// send the bytes
+    // send the bytes
     int ret = ::write(m_fd, writeData, _count+1);
-	if (ret != (signed)(_count+1)) {
+    if (ret != (signed)(_count+1)) {
         ROS_ERROR("[I2C]Error in WriteBytes: Write returned %d (expected %d)", ret, _count);
-		return false;
+        return false;
     }
 
-	// return the lock state to previous state.
-	return true;
+    // return the lock state to previous state.
+    return true;
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Write a single word to i2c device
-/// @param[in]	_regAddr Register address
-/// @param[in]	_data word to be writen
-/// @retval		true
-/// @retval		false
+/// @brief  Write a single word to i2c device
+/// @param[in]  _regAddr Register address
+/// @param[in]  _data word to be writen
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool I2C::WriteWord(uint8_t _regAddr, uint16_t _data)
@@ -273,29 +273,29 @@ bool I2C::WriteWord(uint8_t _regAddr, uint16_t _data)
         return false;
     }
     
-	uint8_t writeData[3];
+    uint8_t writeData[3];
 
-	// assemble bytes to send from data casted as uint8_t*
-	writeData[0] = _regAddr;
-	writeData[1] = (uint8_t)(_data >> 8);
-	writeData[2] = (uint8_t)(_data & 0xFF);
+    // assemble bytes to send from data casted as uint8_t*
+    writeData[0] = _regAddr;
+    writeData[1] = (uint8_t)(_data >> 8);
+    writeData[2] = (uint8_t)(_data & 0xFF);
 
     int ret = ::write(m_fd, writeData, 3);
-	if (ret != 3) {
+    if (ret != 3) {
         ROS_ERROR("[I2C]Error in WriteWord: Write returned %d (expected 3)", ret);
         return false;
     }
     
-	return true;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Write multiple words to i2c device
-/// @param[in]	_regAddr Register address
-/// @param[in]	_data Words to be writen
+/// @brief  Write multiple words to i2c device
+/// @param[in]  _regAddr Register address
+/// @param[in]  _data Words to be writen
 /// @param[in]  _count Number of words to be writen
-/// @retval		true
-/// @retval		false
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool I2C::WriteWords(uint8_t _regAddr, const uint16_t* _data, size_t _count)
@@ -305,29 +305,29 @@ bool I2C::WriteWords(uint8_t _regAddr, const uint16_t* _data, size_t _count)
         return false;
     }
 
-	uint8_t writeData[(_count*2)+1];
+    uint8_t writeData[(_count*2)+1];
 
-	// assemble bytes to send
-	writeData[0] = _regAddr;
-	for (int i = 0; i < _count; i++) {
-		writeData[(i*2)+1] = (uint8_t)(_data[i] >> 8);
-		writeData[(i*2)+2] = (uint8_t)(_data[i] & 0xFF);
-	}
+    // assemble bytes to send
+    writeData[0] = _regAddr;
+    for (int i = 0; i < _count; i++) {
+        writeData[(i*2)+1] = (uint8_t)(_data[i] >> 8);
+        writeData[(i*2)+2] = (uint8_t)(_data[i] & 0xFF);
+    }
 
-	int ret = ::write(m_fd, writeData, (_count*2)+1);
-	if (ret != (signed)(_count*2)+1) {
+    int ret = ::write(m_fd, writeData, (_count*2)+1);
+    if (ret != (signed)(_count*2)+1) {
         ROS_ERROR("[I2C]Error in WriteWords: Write returned %d (expected %d)", ret, (_count*2)+1);
-		return false;
-	}
+        return false;
+    }
     
-	return true;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Send a single byte to i2c device
-/// @param[in]	_data Byte to be send
-/// @retval		true
-/// @retval		false
+/// @brief  Send a single byte to i2c device
+/// @param[in]  _data Byte to be send
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool I2C::SendByte(uint8_t _data)
@@ -336,11 +336,11 @@ bool I2C::SendByte(uint8_t _data)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Send multiple bytes to i2c device
-/// @param[in]	_data Bytes to be send
+/// @brief  Send multiple bytes to i2c device
+/// @param[in]  _data Bytes to be send
 /// @param[in]  _count Number of bytes to be send
-/// @retval		true
-/// @retval		false
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool I2C::SendBytes(const uint8_t* _data, size_t _count)
@@ -350,16 +350,16 @@ bool I2C::SendBytes(const uint8_t* _data, size_t _count)
         return false;
     }
 
-	// Send the bytes
-	int ret = ::write(m_fd, _data, _count);
+    // Send the bytes
+    int ret = ::write(m_fd, _data, _count);
 
-	// Write should have returned the correct # bytes written
-	if (ret != (signed)_count){
+    // Write should have returned the correct # bytes written
+    if (ret != (signed)_count){
         ROS_ERROR("[I2C]Error in SendBytes: Received %d bytes from device(expected %d)", ret, _count);
-		return false;
-	}
+        return false;
+    }
 
-	return true;
+    return true;
 }
 } // namespace io
 } // namespace common_library
