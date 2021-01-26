@@ -19,9 +19,9 @@ namespace types {
 ///////////////////////////////////////////////////////////
 enum eBasicState
 {
-	eSTATE_IDLE = 0,
-	eSTATE_STAND = 1,
-	eSTATE_WALK = 2
+    eSTATE_IDLE = 0,
+    eSTATE_STAND = 1,
+    eSTATE_WALK = 2
 };
 
 ///////////////////////////////////////////////////////////
@@ -32,20 +32,20 @@ enum eBasicState
 ///////////////////////////////////////////////////////////
 static std::string ToString(eBasicState _enum)
 {
-	switch (_enum) {
-	case eSTATE_IDLE:
-		return "eSTATE_IDLE";
-	case eSTATE_STAND:
-		return "eSTATE_STAND";
-	case eSTATE_WALK:
-		return "eSTATE_WALK";
-	default:
-		return "INVALID_ENUM_VALUE";
-	}
+    switch (_enum) {
+    case eSTATE_IDLE:
+    return "eSTATE_IDLE";
+    case eSTATE_STAND:
+    return "eSTATE_STAND";
+    case eSTATE_WALK:
+    return "eSTATE_WALK";
+    default:
+    return "INVALID_ENUM_VALUE";
+    }
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Turn a string into an enum
+/// @brief  Turn a string into an enum
 /// @param[in]	_string String
 /// @param[out]	_enum enum value
 /// @retval		true
