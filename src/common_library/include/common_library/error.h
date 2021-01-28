@@ -74,3 +74,5 @@ private:
 };
 
 } // namespace common_library
+
+#endif // ERROR_H
