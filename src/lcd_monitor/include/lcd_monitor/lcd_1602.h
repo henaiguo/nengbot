@@ -35,11 +35,10 @@ public:
 
     ///////////////////////////////////////////////////////////
     /// @brief  Initialize
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    virtual bool Initialize();
+    virtual common_library::Error Initialize();
 
     ///////////////////////////////////////////////////////////
     /// @brief  Finalize
@@ -52,11 +51,10 @@ public:
     /// @brief  Display message on screen
     /// @param[in]  _msg Message to display
     /// @param[in]  _line line number to display
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    virtual bool Display(std::string _msg, int _line);
+    virtual common_library::Error Display(std::string _msg, int _line);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Clear screen
@@ -83,47 +81,42 @@ private:
     ///////////////////////////////////////////////////////////
     /// @brief  Send command through i2c to lcd1602
     /// @param[in]  _command Command to send
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool i2cWriteCommand(uint8_t _command);
+    common_library::Error i2cWriteCommand(uint8_t _command);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Send char value through i2c to lcd1602
     /// @param[in]  _command Command to send
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool i2cWriteChar(char _data);
+    common_library::Error i2cWriteChar(char _data);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Send 4 bits through i2c to lcd1602
     /// @param[in]  _command Command to send
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool i2cSend4Bits(uint8_t _data);
+    common_library::Error i2cSend4Bits(uint8_t _data);
 
     ///////////////////////////////////////////////////////////
     /// @brief  i2c plus enable
     /// @param[in]  _command Command to send
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note   Clocks EN to latch command
     ///////////////////////////////////////////////////////////
-    bool i2cPlusEnable(uint8_t _data);
+    common_library::Error i2cPlusEnable(uint8_t _data);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Send byte through i2c to lcd1602
     /// @param[in]  _byte Byte to send
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool i2cSendByte(uint8_t _byte);
+    common_library::Error i2cSendByte(uint8_t _byte);
 };
 } // namespace lcd_monitor
 

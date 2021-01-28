@@ -7,6 +7,7 @@
 #ifndef I_LCD_CONTROL_H
 #define I_LCD_CONTROL_H
 
+#include <common_library/error.h>
 #include <string>
 
 namespace lcd_monitor {
@@ -19,11 +20,10 @@ class ILCDControl {
 public:
     ///////////////////////////////////////////////////////////
     /// @brief  Initialize
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    virtual bool Initialize() = 0;
+    virtual common_library::Error Initialize() = 0;
 
     ///////////////////////////////////////////////////////////
     /// @brief  Finalize
@@ -36,11 +36,10 @@ public:
     /// @brief  Display message on screen
     /// @param[in]  _msg Message to display
     /// @param[in]  _line line number to display
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    virtual bool Display(std::string _msg, int _line) = 0;
+    virtual common_library::Error Display(std::string _msg, int _line) = 0;
 
     ///////////////////////////////////////////////////////////
     /// @brief  Clear screen

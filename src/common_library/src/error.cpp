@@ -46,7 +46,7 @@ Error Error::CreateNoError()
 /// @note		No error
 ///////////////////////////////////////////////////////////
 Error::Error()
-	: m_errorMessage("Success"), m_isError(false)
+	: m_errorMessage(""), m_isError(false)
 {
 }
 
@@ -58,6 +58,7 @@ Error::Error()
 Error::Error(const std::string& _message)
 	: m_errorMessage(_message), m_isError(true)
 {
+	// None
 }
 
 ///////////////////////////////////////////////////////////
@@ -66,6 +67,17 @@ Error::Error(const std::string& _message)
 ///////////////////////////////////////////////////////////
 Error::~Error()
 {
+	// None
+}
+
+///////////////////////////////////////////////////////////
+/// @brief		Get message
+/// @param[in]	None
+/// @return		message
+///////////////////////////////////////////////////////////
+const std::string &Error::Message() const
+{
+	return m_errorMessage;
 }
 
 ///////////////////////////////////////////////////////////
@@ -79,13 +91,17 @@ Error::operator bool() const
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Get message
-/// @param[in]	None
-/// @return		message
+/// @brief		Assignment operator
+/// @param[in]	_error Original error
+/// @return		Error&
+/// @note
 ///////////////////////////////////////////////////////////
-const std::string &Error::Message() const
+Error& Error::operator=(const Error& _error)
 {
-	return m_errorMessage;
+	if (m_isError != _error.m_isError) m_isError = _error.m_isError;
+	if (m_errorMessage != _error.m_errorMessage) m_errorMessage = _error.m_errorMessage;
+
+	return *this;
 }
 
 } // namespace common_library

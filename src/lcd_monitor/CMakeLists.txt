@@ -134,6 +134,7 @@ add_library(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   common_library_i2c
+  common_library_error
 )
 
 ## Declare a C++ executable

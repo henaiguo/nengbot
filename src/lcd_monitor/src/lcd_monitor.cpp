@@ -12,6 +12,7 @@
 #include <sstream>
 
 using namespace common_library::types;
+using namespace common_library;
 
 namespace lcd_monitor {
 ///////////////////////////////////////////////////////////
@@ -42,8 +43,9 @@ LCDMonitor::~LCDMonitor()
 ///////////////////////////////////////////////////////////
 bool LCDMonitor::Initialize()
 {
-    if (!m_lcdControl->Initialize()) {
-
+    Error error = m_lcdControl->Initialize();
+    if (error) {
+        ROS_ERROR(error.Message().c_str());
         return false;
     }
 
@@ -90,6 +92,11 @@ bool LCDMonitor::displayCurrentState(common_library::types::eBasicState _state)
 
     ROS_INFO("current basic state: %s", state.c_str());
     m_lcdControl->Clear();
-    return m_lcdControl->Display(state.c_str(), 1);
+    Error error = m_lcdControl->Display(state.c_str(), 1);
+    if (error) {
+        ROS_ERROR(error.Message().c_str());
+        return false;
+    }
+    return true;
 }
 } // namespace lcd_monitor

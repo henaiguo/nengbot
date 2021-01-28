@@ -7,6 +7,8 @@
 #ifndef I2C_H
 #define I2C_H
 
+#include <common_library/error.h>
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <string>
@@ -42,11 +44,10 @@ public:
     /// @brief  Open i2c device
     /// @param[in]  _devName I2c device name
     /// @param[in]  _devAddr I2c device address
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool Open(std::string _devName, uint8_t _devAddr);
+    common_library::Error Open(std::string _devName, uint8_t _devAddr);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Close i2c device
@@ -74,104 +75,94 @@ public:
     /// @brief  Read a single byte from i2c device
     /// @param[in]  _regAddr Register address
     /// @param[out] _data Read data
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool ReadByte(uint8_t _regAddr, uint8_t* _data);
+    common_library::Error ReadByte(uint8_t _regAddr, uint8_t* _data);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Read multiple bytes from i2c device
     /// @param[in]  _regAddr Register address
     /// @param[in]  _count Number of bytes to read
     /// @param[out] _data Read data
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool ReadBytes(uint8_t _regAddr, size_t _count, uint8_t* _data);
+    common_library::Error ReadBytes(uint8_t _regAddr, size_t _count, uint8_t* _data);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Read single word from i2c device
     /// @param[in]  _regAddr Register address
     /// @param[out] _data Read data
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool ReadWord(uint8_t _regAddr, uint16_t* _data);
+    common_library::Error ReadWord(uint8_t _regAddr, uint16_t* _data);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Read multiple words from i2c device
     /// @param[in]  _regAddr Register address
     /// @param[in]  _count Number of words to read
     /// @param[out] _data Read data
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool ReadWords(uint8_t _regAddr, size_t _count, uint16_t* _data);
+    common_library::Error ReadWords(uint8_t _regAddr, size_t _count, uint16_t* _data);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Write a single byte to i2c device
     /// @param[in]  _regAddr Register address
     /// @param[in]  _data Byte to be writen
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool WriteByte(uint8_t _regAddr, uint8_t _data);
+    common_library::Error WriteByte(uint8_t _regAddr, uint8_t _data);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Write multiple bytes to i2c device
     /// @param[in]  _regAddr Register address
     /// @param[in]  _data Bytes to be writen
     /// @param[in]  _count Number of bytes to be writen
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool WriteBytes(uint8_t _regAddr, const uint8_t* _data, size_t _count);
+    common_library::Error WriteBytes(uint8_t _regAddr, const uint8_t* _data, size_t _count);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Write a single word to i2c device
     /// @param[in]  _regAddr Register address
     /// @param[in]  _data word to be writen
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool WriteWord(uint8_t _regAddr, uint16_t _data);
+    common_library::Error WriteWord(uint8_t _regAddr, uint16_t _data);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Write multiple words to i2c device
     /// @param[in]  _regAddr Register address
     /// @param[in]  _data Words to be writen
     /// @param[in]  _count Number of words to be writen
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool WriteWords(uint8_t _regAddr, const uint16_t* _data, size_t _count);
+    common_library::Error WriteWords(uint8_t _regAddr, const uint16_t* _data, size_t _count);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Send a single byte to i2c device
     /// @param[in]  _data Byte to be send
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool SendByte(uint8_t _data);
+    common_library::Error SendByte(uint8_t _data);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Send multiple bytes to i2c device
     /// @param[in]  _data Bytes to be send
     /// @param[in]  _count Number of bytes to be send
-    /// @retval true
-    /// @retval false
+    /// @return common_library::Error
     /// @note
     ///////////////////////////////////////////////////////////
-    bool SendBytes(const uint8_t* _data, size_t _count);
+    common_library::Error SendBytes(const uint8_t* _data, size_t _count);
 
 private:
     /// I2C device fd

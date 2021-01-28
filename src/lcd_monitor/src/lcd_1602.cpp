@@ -9,7 +9,8 @@
 
 #include <unistd.h>
 #include <iostream>
-#include <ros/ros.h>
+
+using namespace common_library;
 
 namespace lcd_monitor {
 /// Device name
@@ -94,38 +95,39 @@ LCD1602::~LCD1602()
 
 ///////////////////////////////////////////////////////////
 /// @brief  Initialize
-/// @retval true
-/// @retval false
+/// @return Error
 /// @note
 ///////////////////////////////////////////////////////////
-bool LCD1602::Initialize()
+Error LCD1602::Initialize()
 {
-    bool res;
+    Error error;
 
-    do {
-        if (!m_i2c.Open(LCD_I2C_DEVICE_NAME, LCD_I2C_DEVICE_ADDRESS)) break;
+    error = m_i2c.Open(LCD_I2C_DEVICE_NAME, LCD_I2C_DEVICE_ADDRESS);
+    if (error) return error;
 
-        // Set lcd1602 to 4 bits mode
-        if (!i2cWriteCommand(0x03)) break;
-        if (!i2cWriteCommand(0x03)) break;
-        if (!i2cWriteCommand(0x03)) break;
-        if (!i2cWriteCommand(0x02)) break;
+    // Set lcd1602 to 4 bits mode
+    error = i2cWriteCommand(0x03);
+    if (error) return error;
+    error = i2cWriteCommand(0x03);
+    if (error) return error;
+    error = i2cWriteCommand(0x03);
+    if (error) return error;
+    error = i2cWriteCommand(0x02);
+    if (error) return error;
 
-        // Set other mode
-        if (!i2cWriteCommand(LCD_FUNCTIONSET | LCD_2LINE | LCD_5x8DOTS | LCD_4BITMODE)) break;
-        if (!i2cWriteCommand(LCD_DISPLAYCONTROL | LCD_DISPLAYON)) break;
-        if (!i2cWriteCommand(LCD_CLEARDISPLAY)) break;
-        if (!i2cWriteCommand(LCD_ENTRYMODESET | LCD_ENTRYLEFT)) break;
+    // Set other mode
+    error = i2cWriteCommand(LCD_FUNCTIONSET | LCD_2LINE | LCD_5x8DOTS | LCD_4BITMODE);
+    if (error) return error;
+    error = i2cWriteCommand(LCD_DISPLAYCONTROL | LCD_DISPLAYON);
+    if (error) return error;
+    error = i2cWriteCommand(LCD_CLEARDISPLAY);
+    if (error) return error;
+    error = i2cWriteCommand(LCD_ENTRYMODESET | LCD_ENTRYLEFT);
+    if (error) return error;
 
-        ::usleep(200);
-        res = true;
-    } while (false);
-    
-    if (!res) {
-        ROS_ERROR("LCD1602 initialize failed");
-        return false;
-    }
-    return true;
+    ::usleep(200);
+
+    return Error::CreateNoError();
 }
 
 ///////////////////////////////////////////////////////////
@@ -144,11 +146,10 @@ void LCD1602::Finalize()
 /// @brief  Display message on screen
 /// @param[in]  _msg Message to display
 /// @param[in]  _line line number to display
-/// @retval true
-/// @retval false
+/// @return Error
 /// @note
 ///////////////////////////////////////////////////////////
-bool LCD1602::Display(std::string _msg, int _line)
+Error LCD1602::Display(std::string _msg, int _line)
 {
     uint8_t position;
     if (_line == 1) {
@@ -158,16 +159,18 @@ bool LCD1602::Display(std::string _msg, int _line)
         position = 0x40;
     }
     else {
-        ROS_ERROR("LCD1602 display failed: invalid _line(%d)", _line);
-        return false;
+        return Error::CreateError("LCD1602 display failed: invalid _line(%d)", _line);
     }
 
-    if (!i2cWriteCommand(0x80 + position)) return false;
+    Error error = i2cWriteCommand(0x80 + position);
+    if (error) return error;
+
     for (int i = 0; i < _msg.size(); ++i) {
-        if(!i2cWriteChar(_msg[i])) return false;
+        error = i2cWriteChar(_msg[i]);
+        if(error) return error;
     }
 
-    return true;
+    return Error::CreateNoError();
 }
 
 ///////////////////////////////////////////////////////////
@@ -177,8 +180,8 @@ bool LCD1602::Display(std::string _msg, int _line)
 ///////////////////////////////////////////////////////////
 void LCD1602::Clear()
 {
-    i2cWriteCommand(LCD_CLEARDISPLAY);
-    i2cWriteCommand(LCD_RETURNHOME);
+    (void)i2cWriteCommand(LCD_CLEARDISPLAY);
+    (void)i2cWriteCommand(LCD_RETURNHOME);
 }
 
 ///////////////////////////////////////////////////////////
@@ -191,89 +194,104 @@ void LCD1602::Backlight(bool _onoff)
 {
     if (_onoff) {
         m_backlight = LCD_BACKLIGHT;
-        i2cWriteCommand(0);
+        (void)i2cWriteCommand(0);
     }
     else {
         m_backlight = LCD_NOBACKLIGHT;
-        i2cWriteCommand(0);
+        (void)i2cWriteCommand(0);
     }
 }
 
 ///////////////////////////////////////////////////////////
 /// @brief  Send command through i2c to lcd1602
 /// @param[in]  _command Command to send
-/// @retval true
-/// @retval false
+/// @return Error
 /// @note
 ///////////////////////////////////////////////////////////
-bool LCD1602::i2cWriteCommand(uint8_t _command)
+Error LCD1602::i2cWriteCommand(uint8_t _command)
 {
-    if (!i2cSend4Bits(_command & 0xF0)) return false;
-    if (!i2cSend4Bits((_command << 4) & 0xF0)) return false;
+    Error error;
 
-    return true;
+    error = i2cSend4Bits(_command & 0xF0);
+    if (error) return error;
+
+    error = i2cSend4Bits((_command << 4) & 0xF0);
+    if (error) return error;
+
+    return Error::CreateNoError();
 }
 
 ///////////////////////////////////////////////////////////
 /// @brief  Send char value through i2c to lcd1602
 /// @param[in]  _command Command to send
-/// @retval true
-/// @retval false
+/// @return Error
 /// @note
 ///////////////////////////////////////////////////////////
-bool LCD1602::i2cWriteChar(char _data)
+Error LCD1602::i2cWriteChar(char _data)
 {
-    if (!i2cSend4Bits(Rs | ((uint8_t)_data & 0xF0))) return false;
-    if (!i2cSend4Bits(Rs | (((uint8_t)_data << 4) & 0xF0))) return false;
+    Error error;
 
-    return true;
+    error = i2cSend4Bits(Rs | ((uint8_t)_data & 0xF0));
+    if (error) return error;
+
+    error = i2cSend4Bits(Rs | (((uint8_t)_data << 4) & 0xF0));
+    if (error) return error;
+
+    return Error::CreateNoError();
 }
 
 ///////////////////////////////////////////////////////////
 /// @brief  Send 4 bits through i2c to lcd1602
 /// @param[in]  _data Command to send
-/// @retval true
-/// @retval false
+/// @return Error
 /// @note
 ///////////////////////////////////////////////////////////
-bool LCD1602::i2cSend4Bits(uint8_t _data)
+Error LCD1602::i2cSend4Bits(uint8_t _data)
 {
-    if (!i2cSendByte(_data)) return false;
-    if (!i2cPlusEnable(_data)) return false;
+    Error error;
 
-    return true;
+    error = i2cSendByte(_data);
+    if (error) return error;
+
+    error = i2cPlusEnable(_data);
+    if (error) return error;
+
+    return Error::CreateNoError();
 }
 
 ///////////////////////////////////////////////////////////
 /// @brief  i2c plus enable
 /// @param[in]  _data Command to send
-/// @retval true
-/// @retval false
+/// @return Error
 /// @note   Clocks EN to latch command
 ///////////////////////////////////////////////////////////
-bool LCD1602::i2cPlusEnable(uint8_t _data)
+Error LCD1602::i2cPlusEnable(uint8_t _data)
 {
-    if (!i2cSendByte(_data | En)) return false;
+    Error error;
+
+    error = i2cSendByte(_data | En);
+    if (error) return error;
     ::usleep(1);
 
-    if (!i2cSendByte(_data & ~En)) return false;
+    error = i2cSendByte(_data & ~En);
+    if (error) return error;
     ::usleep(50);
 
-    return true;
+    return Error::CreateNoError();
 }
 
 ///////////////////////////////////////////////////////////
 /// @brief  Send byte through i2c to lcd1602
 /// @param[in]  _byte Byte to send
-/// @retval true
-/// @retval false
+/// @return Error
 /// @note
 ///////////////////////////////////////////////////////////
-bool LCD1602::i2cSendByte(uint8_t _byte)
+Error LCD1602::i2cSendByte(uint8_t _byte)
 {
-    if (!m_i2c.SendByte(_byte | m_backlight)) return false;
+    Error error = m_i2c.SendByte(_byte | m_backlight);
+    if (error) return error;
     
     ::usleep(1000); // 1ms
-    return true;
+    return Error::CreateNoError();
 }
 } // namespace lcd_monitor

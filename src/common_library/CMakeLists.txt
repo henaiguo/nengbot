@@ -130,11 +130,11 @@ add_library(common_library_error
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(common_library_i2c common_library_error)
 
-target_link_libraries(common_library_i2c
-  ${catkin_LIBRARIES}
-)
+# target_link_libraries(common_library_i2c
+#   ${catkin_LIBRARIES}
+# )
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context

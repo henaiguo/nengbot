@@ -51,6 +51,13 @@ public:
 	///////////////////////////////////////////////////////////
 	virtual ~Error();
 
+	///////////////////////////////////////////////////////////
+	/// @brief		Get message
+	/// @param[in]	None
+	/// @return		message
+	///////////////////////////////////////////////////////////
+	const std::string &Message() const;
+
     ///////////////////////////////////////////////////////////
 	/// @brief		Check if there is an error
 	/// @param[in]	None
@@ -59,11 +66,12 @@ public:
 	operator bool() const;
 
 	///////////////////////////////////////////////////////////
-	/// @brief		Get message
-	/// @param[in]	None
-	/// @return		message
+	/// @brief		Assignment operator
+	/// @param[in]	_error Original error
+	/// @return		Error&
+	/// @note
 	///////////////////////////////////////////////////////////
-	const std::string &Message() const;
+	Error& operator=(const Error& _error);
 
 private:
     /// Error message
