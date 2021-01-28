@@ -123,6 +123,10 @@ add_library(common_library_i2c
   src/io/i2c.cpp
 )
 
+add_library(common_library_error
+  src/error.cpp
+)
+
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
