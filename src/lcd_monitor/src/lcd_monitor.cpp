@@ -45,7 +45,7 @@ bool LCDMonitor::Initialize()
 {
     Error error = m_lcdControl->Initialize();
     if (error) {
-        ROS_ERROR(error.Message().c_str());
+        ROS_ERROR("%s", error.Message().c_str());
         return false;
     }
 
@@ -94,7 +94,7 @@ bool LCDMonitor::displayCurrentState(common_library::types::eBasicState _state)
     m_lcdControl->Clear();
     Error error = m_lcdControl->Display(state.c_str(), 1);
     if (error) {
-        ROS_ERROR(error.Message().c_str());
+        ROS_ERROR("%s", error.Message().c_str());
         return false;
     }
     return true;
