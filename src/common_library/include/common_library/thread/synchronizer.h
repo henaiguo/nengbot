@@ -1,26 +1,116 @@
 ///////////////////////////////////////////////////////////
 /// @file   synchronizer.h
-/// @brief  Thread synchronize manager including mutex and
-///         condition of POSIX
+/// @brief  Synchronizer using POSIX mutex rwlock and condition
 /// @author henaiguo
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
-#ifndef INNER_THREAD_H
-#define INNER_THREAD_H
+#ifndef SYNCHRONIZER_H
+#define SYNCHRONIZER_H
 
 #include <pthread.h>
+
+#define SYN_ENTER_RETURN(mutex, synobj, ret) \
+	common_library::library::Synchronizer synobj(mutex); \
+	if (synobj.Enter() == false) { \
+		return ret; \
+	}
+
+#define SYN_ENTER_RETURN_TIMEOUT(mutex, synobj, timeout, ret) \
+	common_library::library::Synchronizer synobj(mutex); \
+	if (synobj.Enter(timeout) == false) { \
+		return ret; \
+	}
+
+#define SYN_ENTER(mutex, synobj) \
+	common_library::library::Synchronizer synobj(mutex); \
+	if (synobj.Enter() == false) { \
+		return; \
+	}
+
+#define SYN_ENTER_TIMEOUT(mutex, synobj, timeout) \
+	common_library::library::Synchronizer synobj(mutex); \
+	if (synobj.Enter(timeout) == false) { \
+		return; \
+	}
+
+#define SYN_EXIT(synobj) \
+	synobj.Leave();
+
+#define READ_ENTER_RETURN(rwlock, synobj, ret) \
+	common_library::library::Synchronizer synobj(rwlock); \
+	if (synobj.ReadEnter() == false) { \
+		return ret; \
+	}
+
+#define READ_ENTER_RETURN_TIMEOUT(rwlock, synobj, timeout, ret) \
+	common_library::library::Synchronizer synobj(rwlock); \
+	if (synobj.ReadEnter(timeout) == false) { \
+		return ret; \
+	}
+
+#define READ_ENTER(rwlock, synobj) \
+	common_library::library::Synchronizer synobj(rwlock); \
+	if (synobj.ReadEnter() == false) { \
+		return; \
+	}
+
+#define READ_ENTER_TIMEOUT(rwlock, synobj, timeout) \
+	common_library::library::Synchronizer synobj(rwlock); \
+	if (synobj.ReadEnter(timeout) == false) { \
+		return; \
+	}
+
+#define READ_EXIT(synobj) \
+	synobj.Leave();
+
+#define WRITE_ENTER_RETURN(rwlock, synobj, ret) \
+	common_library::library::Synchronizer synobj(rwlock); \
+	if (synobj.WriteEnter() == false) { \
+		return ret; \
+	}
+
+#define WRITE_ENTER_RETURN_TIMEOUT(rwlock, synobj, timeout, ret) \
+	common_library::library::Synchronizer synobj(rwlock); \
+	if (synobj.WriteEnter(timeout) == false) { \
+		return ret; \
+	}
+
+#define WRITE_ENTER(rwlock, synobj) \
+	common_library::library::Synchronizer synobj(rwlock); \
+	if (synobj.WriteEnter() == false) { \
+		return; \
+	}
+
+#define WRITE_ENTER_TIMEOUT(rwlock, synobj, timeout) \
+	common_library::library::Synchronizer synobj(rwlock); \
+	if (synobj.WriteEnter(timeout) == false) { \
+		return; \
+	}
+
+#define WRITE_EXIT(synobj) \
+	synobj.Leave();
 
 namespace common_library {
 namespace thread {
 ///////////////////////////////////////////////////////////
-/// @class Synchronizer
-/// @brief Thread synchronize manager including mutex and
-///        condition of POSIX
+/// @class	Synchronizer
+/// @brief  Synchronizer using POSIX mutex rwlock and condition
 /// @note
 ///////////////////////////////////////////////////////////
 class Synchronizer
 {
 public:
+	///////////////////////////////////////////////////////////
+	/// @enum   eSynchronizeType
+	/// @brief	Synchronize type
+	/// @note
+	///////////////////////////////////////////////////////////
+    enum eSynchronizeType
+    {
+        eSYN_MUTEX = 0,
+        eSYN_READWRITE
+    };
+
     ///////////////////////////////////////////////////////////
     /// @brief  Default constructor
     /// @return None
@@ -29,144 +119,95 @@ public:
     Synchronizer();
 
     ///////////////////////////////////////////////////////////
+    /// @brief  Default constructor
+	/// @param[in]	_type eSynchronizeType
+    /// @return None
+    /// @note
+    ///////////////////////////////////////////////////////////
+    Synchronizer(eSynchronizeType _type);
+
+    ///////////////////////////////////////////////////////////
     /// @brief  Destructor
     /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
     virtual ~Synchronizer();
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Open i2c device
-    /// @param[in]  _devName I2c device name
-    /// @param[in]  _devAddr I2c device address
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error Open(std::string _devName, uint8_t _devAddr);
+	///////////////////////////////////////////////////////////
+	/// @brief		Enter SYN section (no timeout)
+	/// @retval		true
+	/// @retval		false
+	/// @note
+	///////////////////////////////////////////////////////////
+	bool Enter();
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Close i2c device
-    /// @return None
-    /// @note
-    ///////////////////////////////////////////////////////////
-    void Close();
+	///////////////////////////////////////////////////////////
+	/// @brief		Enter SYN section (timeout)
+	/// @param[in]	_usec Timeout (microsecond)
+	/// @retval		true
+	/// @retval		false
+	/// @note
+	///////////////////////////////////////////////////////////
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Whether the i2c device is open
-    /// @retval true
-    /// @retval false
-    /// @note
-    ///////////////////////////////////////////////////////////
-    bool IsOpen() const;
+	bool Enter(unsigned long _usec);
+	///////////////////////////////////////////////////////////
+	/// @brief		Enter the read SYN interval (no timeout)
+	/// @retval		true
+	/// @retval		false
+	/// @note
+	///////////////////////////////////////////////////////////
+	bool ReadEnter();
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Get the FD of the i2c device
-    /// @return int
-    /// @note
-    ///////////////////////////////////////////////////////////
-    int GetFD() const;
+	///////////////////////////////////////////////////////////
+	/// @brief		Enter write SYN interval (no timeout)
+	/// @retval		true
+	/// @retval		false
+	/// @note
+	///////////////////////////////////////////////////////////
+	bool WriteEnter();
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Read a single byte from i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[out] _data Read data
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error ReadByte(uint8_t _regAddr, uint8_t* _data);
+	///////////////////////////////////////////////////////////
+	/// @brief		Enter the read SYN section (with timeout)
+	/// @param[in]	_usec Timeout (microsecond)
+	/// @retval		true
+	/// @retval		false
+	/// @note
+	///////////////////////////////////////////////////////////
+	bool ReadEnter(unsigned long _usec);
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Read multiple bytes from i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[in]  _count Number of bytes to read
-    /// @param[out] _data Read data
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error ReadBytes(uint8_t _regAddr, size_t _count, uint8_t* _data);
+	///////////////////////////////////////////////////////////
+	/// @brief		Enter the write SYN section (with timeout)
+	/// @param[in]	_usec Timeout (microsecond)
+	/// @retval		true
+	/// @retval		false
+	/// @note
+	///////////////////////////////////////////////////////////
+	bool WriteEnter(unsigned long _usec);
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Read single word from i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[out] _data Read data
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error ReadWord(uint8_t _regAddr, uint16_t* _data);
-
-    ///////////////////////////////////////////////////////////
-    /// @brief  Read multiple words from i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[in]  _count Number of words to read
-    /// @param[out] _data Read data
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error ReadWords(uint8_t _regAddr, size_t _count, uint16_t* _data);
-
-    ///////////////////////////////////////////////////////////
-    /// @brief  Write a single byte to i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[in]  _data Byte to be writen
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error WriteByte(uint8_t _regAddr, uint8_t _data);
-
-    ///////////////////////////////////////////////////////////
-    /// @brief  Write multiple bytes to i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[in]  _data Bytes to be writen
-    /// @param[in]  _count Number of bytes to be writen
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error WriteBytes(uint8_t _regAddr, const uint8_t* _data, size_t _count);
-
-    ///////////////////////////////////////////////////////////
-    /// @brief  Write a single word to i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[in]  _data word to be writen
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error WriteWord(uint8_t _regAddr, uint16_t _data);
-
-    ///////////////////////////////////////////////////////////
-    /// @brief  Write multiple words to i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[in]  _data Words to be writen
-    /// @param[in]  _count Number of words to be writen
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error WriteWords(uint8_t _regAddr, const uint16_t* _data, size_t _count);
-
-    ///////////////////////////////////////////////////////////
-    /// @brief  Send a single byte to i2c device
-    /// @param[in]  _data Byte to be send
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error SendByte(uint8_t _data);
-
-    ///////////////////////////////////////////////////////////
-    /// @brief  Send multiple bytes to i2c device
-    /// @param[in]  _data Bytes to be send
-    /// @param[in]  _count Number of bytes to be send
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error SendBytes(const uint8_t* _data, size_t _count);
+	///////////////////////////////////////////////////////////
+	/// @brief		Exit the SYN section
+	/// @return		None
+	/// @note
+	///////////////////////////////////////////////////////////
+	void Leave();
 
 private:
+    /// Synchronize type
+    eSynchronizeType m_type;
+
     /// POSIX mutex
     ::pthread_mutex_t m_mutex;
-    
-    /// POSIX condition
-    ::pthread_cond_t m_condition;
+
+    /// POSIX rwlock
+    ::pthread_rwlock_t m_rwlock;
+
+    /// Number of times the SYN sction has been entered(mutex)
+    unsigned long m_mutexCount;
+
+    /// Number of times the SYN sction has been entered(rwlock)
+    unsigned long m_rwlockCount;
 };
 } // namespace thread
 } // namespace common_library
 
-#endif // INNER_THREAD_H
+#endif // SYNCHRONIZER_H

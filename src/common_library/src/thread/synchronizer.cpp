@@ -1,172 +1,230 @@
 ///////////////////////////////////////////////////////////
-/// @file   synchronizer.h
-/// @brief  Thread synchronize manager including mutex and
-///         condition of POSIX
+/// @file   Synchronizer.cpp
+/// @brief  Synchronizer using POSIX mutex rwlock and condition
 /// @author henaiguo
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
-#ifndef INNER_THREAD_H
-#define INNER_THREAD_H
 
-#include <pthread.h>
+#include <common_library/thread/Synchronizer.h>
+
+#include <cerrno>
 
 namespace common_library {
 namespace thread {
 ///////////////////////////////////////////////////////////
-/// @class Synchronizer
-/// @brief Thread synchronize manager including mutex and
-///        condition of POSIX
+/// @brief  Default constructor
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
-class Synchronizer
+Synchronizer::Synchronizer()
 {
-public:
-    ///////////////////////////////////////////////////////////
-    /// @brief  Default constructor
-    /// @return None
-    /// @note
-    ///////////////////////////////////////////////////////////
-    Synchronizer();
+    Synchronizer(eSYN_MUTEX);
+}
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Destructor
-    /// @return None
-    /// @note
-    ///////////////////////////////////////////////////////////
-    virtual ~Synchronizer();
+///////////////////////////////////////////////////////////
+/// @brief  Default constructor
+/// @param[in]	_type eSynchronizeType
+/// @return None
+/// @note
+///////////////////////////////////////////////////////////
+Synchronizer::Synchronizer(eSynchronizeType _type)
+    : m_type(_type), m_mutexCount(0UL), m_rwlockCount(0UL)
+{
+    switch (m_type)
+    {
+    case eSYN_MUTEX:
+        ::pthread_mutex_init(&m_mutex, NULL);
+        break;
+    case eSYN_READWRITE:
+        ::pthread_rwlock_init(&m_rwlock, NULL);
+        break;
+    default:
+        break;
+    }
+}
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Open i2c device
-    /// @param[in]  _devName I2c device name
-    /// @param[in]  _devAddr I2c device address
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error Open(std::string _devName, uint8_t _devAddr);
+///////////////////////////////////////////////////////////
+/// @brief  Destructor
+/// @return None
+/// @note
+///////////////////////////////////////////////////////////
+Synchronizer::~Synchronizer()
+{
+    Leave();
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Close i2c device
-    /// @return None
-    /// @note
-    ///////////////////////////////////////////////////////////
-    void Close();
+    switch (m_type)
+    {
+    case eSYN_MUTEX:
+        ::pthread_mutex_destroy(&m_mutex);
+        break;
+    case eSYN_READWRITE:
+        ::pthread_rwlock_destroy(&m_rwlock);
+        break;
+    default:
+        break;
+    }
+}
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Whether the i2c device is open
-    /// @retval true
-    /// @retval false
-    /// @note
-    ///////////////////////////////////////////////////////////
-    bool IsOpen() const;
+///////////////////////////////////////////////////////////
+/// @brief		Enter guard section (no timeout)
+/// @retval		true
+/// @retval		false
+/// @note
+///////////////////////////////////////////////////////////
+bool Synchronizer::Enter()
+{
+    if (m_type != eSYN_MUTEX) return false;
+    int res = ::pthread_mutex_lock(&m_mutex);
+    switch (res)
+    {
+    case 0:
+        m_mutexCount++;
+        return true;
+    case ::EDEADLK:
+        return true;   
+    default:
+        return false;
+    }
+}
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Get the FD of the i2c device
-    /// @return int
-    /// @note
-    ///////////////////////////////////////////////////////////
-    int GetFD() const;
+///////////////////////////////////////////////////////////
+/// @brief		Enter guard section (timeout)
+/// @param[in]	_usec Timeout (microsecond)
+/// @retval		true
+/// @retval		false
+/// @note
+///////////////////////////////////////////////////////////
+bool Synchronizer::Enter(unsigned long _usec)
+{
+    // TODO: time
+    if (m_type != eSYN_MUTEX) return false;
+    int res = ::pthread_mutex_timedlock(&m_mutex, 0);
+    switch (res)
+    {
+    case 0:
+        m_mutexCount++;
+        return true;
+    case ::EDEADLK:
+        return true;   
+    default:
+        return false;
+    }
+}
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Read a single byte from i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[out] _data Read data
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error ReadByte(uint8_t _regAddr, uint8_t* _data);
+///////////////////////////////////////////////////////////
+/// @brief		Enter the read guard interval (no timeout)
+/// @retval		true
+/// @retval		false
+/// @note
+///////////////////////////////////////////////////////////
+bool Synchronizer::ReadEnter()
+{
+    if (m_type != eSYN_READWRITE) return false;
+	int res = ::pthread_rwlock_rdlock(&m_rwlock);
+	switch (res) {
+	case 0:
+        m_rwlockCount++;
+		return true;
+	case ::EDEADLK:
+		return true;
+	default:
+		return false;
+	}
+}
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Read multiple bytes from i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[in]  _count Number of bytes to read
-    /// @param[out] _data Read data
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error ReadBytes(uint8_t _regAddr, size_t _count, uint8_t* _data);
+///////////////////////////////////////////////////////////
+/// @brief		Enter write guard interval (no timeout)
+/// @retval		true
+/// @retval		false
+/// @note
+///////////////////////////////////////////////////////////
+bool Synchronizer::WriteEnter()
+{
+    if (m_type != eSYN_READWRITE) return false;
+	int res = ::pthread_rwlock_wrlock(&m_rwlock);
+	switch (res) {
+	case 0:
+        m_rwlockCount++;
+		return true;
+	case ::EDEADLK:
+		return true;
+	default:
+		return false;
+	}
+}
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Read single word from i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[out] _data Read data
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error ReadWord(uint8_t _regAddr, uint16_t* _data);
+///////////////////////////////////////////////////////////
+/// @brief		Enter the read guard section (with timeout)
+/// @param[in]	_usec Timeout (microsecond)
+/// @retval		true
+/// @retval		false
+/// @note
+///////////////////////////////////////////////////////////
+bool Synchronizer::ReadEnter(unsigned long _usec)
+{
+    // TODO: time
+    if (m_type != eSYN_READWRITE) return false;
+	int res = ::pthread_rwlock_timedrdlock(&m_lock, 0);
+	switch (res) {
+	case 0:
+        m_rwlockCount++;
+		return true;
+	case ::EDEADLK:
+		return true;
+	default:
+		return false;
+	}
+}
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Read multiple words from i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[in]  _count Number of words to read
-    /// @param[out] _data Read data
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error ReadWords(uint8_t _regAddr, size_t _count, uint16_t* _data);
+///////////////////////////////////////////////////////////
+/// @brief		Enter the write guard section (with timeout)
+/// @param[in]	_usec Timeout (microsecond)
+/// @retval		true
+/// @retval		false
+/// @note
+///////////////////////////////////////////////////////////
+bool Synchronizer::WriteEnter(unsigned long _usec)
+{
+    // TODO: time
+    if (m_type != eSYN_READWRITE) return false;
+	int res = ::pthread_rwlock_timedwrlock(&m_lock, 0);
+	switch (res) {
+	case 0:
+        m_rwlockCount++;
+		return true;
+	case ::EDEADLK:
+		return true;
+	default:
+		return false;
+	}
+}
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Write a single byte to i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[in]  _data Byte to be writen
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error WriteByte(uint8_t _regAddr, uint8_t _data);
-
-    ///////////////////////////////////////////////////////////
-    /// @brief  Write multiple bytes to i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[in]  _data Bytes to be writen
-    /// @param[in]  _count Number of bytes to be writen
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error WriteBytes(uint8_t _regAddr, const uint8_t* _data, size_t _count);
-
-    ///////////////////////////////////////////////////////////
-    /// @brief  Write a single word to i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[in]  _data word to be writen
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error WriteWord(uint8_t _regAddr, uint16_t _data);
-
-    ///////////////////////////////////////////////////////////
-    /// @brief  Write multiple words to i2c device
-    /// @param[in]  _regAddr Register address
-    /// @param[in]  _data Words to be writen
-    /// @param[in]  _count Number of words to be writen
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error WriteWords(uint8_t _regAddr, const uint16_t* _data, size_t _count);
-
-    ///////////////////////////////////////////////////////////
-    /// @brief  Send a single byte to i2c device
-    /// @param[in]  _data Byte to be send
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error SendByte(uint8_t _data);
-
-    ///////////////////////////////////////////////////////////
-    /// @brief  Send multiple bytes to i2c device
-    /// @param[in]  _data Bytes to be send
-    /// @param[in]  _count Number of bytes to be send
-    /// @return common_library::Error
-    /// @note
-    ///////////////////////////////////////////////////////////
-    common_library::Error SendBytes(const uint8_t* _data, size_t _count);
-
-private:
-    /// POSIX mutex
-    ::pthread_mutex_t m_mutex;
-    
-    /// POSIX condition
-    ::pthread_cond_t m_condition;
-};
+///////////////////////////////////////////////////////////
+/// @brief		Exit the guard section
+/// @return		None
+/// @note
+///////////////////////////////////////////////////////////
+void Synchronizer::Leave()
+{
+    switch (m_type)
+    {
+    case eSYN_MUTEX:
+        while (m_mutexCount > 0)
+        {
+            ::pthread_mutex_unlock(&m_mutex);
+            m_mutexCount--;
+        }
+        break;
+    case eSYN_READWRITE:
+        while (m_rwlockCount > 0)
+        {
+            ::pthread_rwlock_unlock(&m_rwLock);
+            m_rwlockCount--;
+        }
+        break;
+    default:
+        break;
+    }    
+}
 } // namespace thread
 } // namespace common_library
-
-#endif // INNER_THREAD_H
