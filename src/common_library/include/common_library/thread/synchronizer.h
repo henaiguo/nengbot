@@ -9,26 +9,26 @@
 
 #include <pthread.h>
 
-#define SYN_ENTER_RETURN(mutex, synobj, ret) \
-	common_library::library::Synchronizer synobj(mutex); \
+#define SYN_ENTER_RETURN(synobj, ret) \
+	common_library::library::Synchronizer synobj(eSYN_MUTEX); \
 	if (synobj.Enter() == false) { \
 		return ret; \
 	}
 
-#define SYN_ENTER_RETURN_TIMEOUT(mutex, synobj, timeout, ret) \
-	common_library::library::Synchronizer synobj(mutex); \
+#define SYN_ENTER_RETURN_TIMEOUT(synobj, timeout, ret) \
+	common_library::library::Synchronizer synobj(eSYN_MUTEX); \
 	if (synobj.Enter(timeout) == false) { \
 		return ret; \
 	}
 
-#define SYN_ENTER(mutex, synobj) \
-	common_library::library::Synchronizer synobj(mutex); \
+#define SYN_ENTER(synobj) \
+	common_library::library::Synchronizer synobj(eSYN_MUTEX); \
 	if (synobj.Enter() == false) { \
 		return; \
 	}
 
-#define SYN_ENTER_TIMEOUT(mutex, synobj, timeout) \
-	common_library::library::Synchronizer synobj(mutex); \
+#define SYN_ENTER_TIMEOUT(synobj, timeout) \
+	common_library::library::Synchronizer synobj(eSYN_MUTEX); \
 	if (synobj.Enter(timeout) == false) { \
 		return; \
 	}
@@ -36,26 +36,26 @@
 #define SYN_EXIT(synobj) \
 	synobj.Leave();
 
-#define READ_ENTER_RETURN(rwlock, synobj, ret) \
-	common_library::library::Synchronizer synobj(rwlock); \
+#define READ_ENTER_RETURN(synobj, ret) \
+	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
 	if (synobj.ReadEnter() == false) { \
 		return ret; \
 	}
 
-#define READ_ENTER_RETURN_TIMEOUT(rwlock, synobj, timeout, ret) \
-	common_library::library::Synchronizer synobj(rwlock); \
+#define READ_ENTER_RETURN_TIMEOUT(synobj, timeout, ret) \
+	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
 	if (synobj.ReadEnter(timeout) == false) { \
 		return ret; \
 	}
 
-#define READ_ENTER(rwlock, synobj) \
-	common_library::library::Synchronizer synobj(rwlock); \
+#define READ_ENTER(synobj) \
+	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
 	if (synobj.ReadEnter() == false) { \
 		return; \
 	}
 
-#define READ_ENTER_TIMEOUT(rwlock, synobj, timeout) \
-	common_library::library::Synchronizer synobj(rwlock); \
+#define READ_ENTER_TIMEOUT(synobj, timeout) \
+	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
 	if (synobj.ReadEnter(timeout) == false) { \
 		return; \
 	}
@@ -63,26 +63,26 @@
 #define READ_EXIT(synobj) \
 	synobj.Leave();
 
-#define WRITE_ENTER_RETURN(rwlock, synobj, ret) \
-	common_library::library::Synchronizer synobj(rwlock); \
+#define WRITE_ENTER_RETURN(synobj, ret) \
+	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
 	if (synobj.WriteEnter() == false) { \
 		return ret; \
 	}
 
-#define WRITE_ENTER_RETURN_TIMEOUT(rwlock, synobj, timeout, ret) \
-	common_library::library::Synchronizer synobj(rwlock); \
+#define WRITE_ENTER_RETURN_TIMEOUT(synobj, timeout, ret) \
+	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
 	if (synobj.WriteEnter(timeout) == false) { \
 		return ret; \
 	}
 
-#define WRITE_ENTER(rwlock, synobj) \
-	common_library::library::Synchronizer synobj(rwlock); \
+#define WRITE_ENTER(synobj) \
+	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
 	if (synobj.WriteEnter() == false) { \
 		return; \
 	}
 
-#define WRITE_ENTER_TIMEOUT(rwlock, synobj, timeout) \
-	common_library::library::Synchronizer synobj(rwlock); \
+#define WRITE_ENTER_TIMEOUT(synobj, timeout) \
+	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
 	if (synobj.WriteEnter(timeout) == false) { \
 		return; \
 	}
