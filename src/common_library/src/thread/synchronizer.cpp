@@ -7,40 +7,31 @@
 
 #include <common_library/thread/Synchronizer.h>
 
-#include <cerrno>
-
 namespace common_library {
 namespace thread {
+
 ///////////////////////////////////////////////////////////
 /// @brief  Default constructor
+/// @param[in]	_mutex Mutex object
 /// @return None
 /// @note
 ///////////////////////////////////////////////////////////
-Synchronizer::Synchronizer()
+Synchronizer::Synchronizer(Mutex& _mutex)
+    : m_type(eSYN_MUTEX), m_mutex(_mutex), m_mutexCount(0UL)
 {
-    Synchronizer(eSYN_MUTEX);
+    // None
 }
 
 ///////////////////////////////////////////////////////////
 /// @brief  Default constructor
-/// @param[in]	_type eSynchronizeType
+/// @param[in]	_rwlock RWLock object
 /// @return None
 /// @note
 ///////////////////////////////////////////////////////////
-Synchronizer::Synchronizer(eSynchronizeType _type)
-    : m_type(_type), m_mutexCount(0UL), m_rwlockCount(0UL)
+Synchronizer::Synchronizer(RWLock& _rwlock)
+    : m_type(eSYN_RWLOCK), m_rwlock(_rwlock), m_rwlockCount(0UL)
 {
-    switch (m_type)
-    {
-    case eSYN_MUTEX:
-        ::pthread_mutex_init(&m_mutex, NULL);
-        break;
-    case eSYN_READWRITE:
-        ::pthread_rwlock_init(&m_rwlock, NULL);
-        break;
-    default:
-        break;
-    }
+    // None
 }
 
 ///////////////////////////////////////////////////////////
@@ -51,18 +42,6 @@ Synchronizer::Synchronizer(eSynchronizeType _type)
 Synchronizer::~Synchronizer()
 {
     Leave();
-
-    switch (m_type)
-    {
-    case eSYN_MUTEX:
-        ::pthread_mutex_destroy(&m_mutex);
-        break;
-    case eSYN_READWRITE:
-        ::pthread_rwlock_destroy(&m_rwlock);
-        break;
-    default:
-        break;
-    }
 }
 
 ///////////////////////////////////////////////////////////
@@ -74,14 +53,12 @@ Synchronizer::~Synchronizer()
 bool Synchronizer::Enter()
 {
     if (m_type != eSYN_MUTEX) return false;
-    int res = ::pthread_mutex_lock(&m_mutex);
-    switch (res)
-    {
-    case 0:
+    switch (m_mutex.Lock()) {
+	case common_library::types::eLOCK_SUCCESS:
         m_mutexCount++;
         return true;
-    case ::EDEADLK:
-        return true;   
+    case common_library::types::eLOCK_ALREADY:
+        return true;
     default:
         return false;
     }
@@ -96,15 +73,13 @@ bool Synchronizer::Enter()
 ///////////////////////////////////////////////////////////
 bool Synchronizer::Enter(unsigned long _usec)
 {
-    // TODO: time
     if (m_type != eSYN_MUTEX) return false;
-    int res = ::pthread_mutex_timedlock(&m_mutex, 0);
-    switch (res)
+    switch (m_mutex.Lock(_usec))
     {
-    case 0:
+	case common_library::types::eLOCK_SUCCESS:
         m_mutexCount++;
         return true;
-    case ::EDEADLK:
+    case common_library::types::eLOCK_ALREADY:
         return true;   
     default:
         return false;
@@ -119,13 +94,12 @@ bool Synchronizer::Enter(unsigned long _usec)
 ///////////////////////////////////////////////////////////
 bool Synchronizer::ReadEnter()
 {
-    if (m_type != eSYN_READWRITE) return false;
-	int res = ::pthread_rwlock_rdlock(&m_rwlock);
-	switch (res) {
-	case 0:
+    if (m_type != eSYN_RWLOCK) return false;
+	switch (m_rwlock.ReadLock()) {
+	case common_library::types::eLOCK_SUCCESS:
         m_rwlockCount++;
 		return true;
-	case ::EDEADLK:
+    case common_library::types::eLOCK_ALREADY:
 		return true;
 	default:
 		return false;
@@ -140,13 +114,12 @@ bool Synchronizer::ReadEnter()
 ///////////////////////////////////////////////////////////
 bool Synchronizer::WriteEnter()
 {
-    if (m_type != eSYN_READWRITE) return false;
-	int res = ::pthread_rwlock_wrlock(&m_rwlock);
-	switch (res) {
-	case 0:
+    if (m_type != eSYN_RWLOCK) return false;
+	switch (m_rwlock.WriteLock()) {
+	case common_library::types::eLOCK_SUCCESS:
         m_rwlockCount++;
 		return true;
-	case ::EDEADLK:
+    case common_library::types::eLOCK_ALREADY:
 		return true;
 	default:
 		return false;
@@ -162,14 +135,12 @@ bool Synchronizer::WriteEnter()
 ///////////////////////////////////////////////////////////
 bool Synchronizer::ReadEnter(unsigned long _usec)
 {
-    // TODO: time
-    if (m_type != eSYN_READWRITE) return false;
-	int res = ::pthread_rwlock_timedrdlock(&m_lock, 0);
-	switch (res) {
-	case 0:
+    if (m_type != eSYN_RWLOCK) return false;
+	switch (m_rwlock.ReadLock(_usec)) {
+	case common_library::types::eLOCK_SUCCESS:
         m_rwlockCount++;
 		return true;
-	case ::EDEADLK:
+    case common_library::types::eLOCK_ALREADY:
 		return true;
 	default:
 		return false;
@@ -185,14 +156,12 @@ bool Synchronizer::ReadEnter(unsigned long _usec)
 ///////////////////////////////////////////////////////////
 bool Synchronizer::WriteEnter(unsigned long _usec)
 {
-    // TODO: time
-    if (m_type != eSYN_READWRITE) return false;
-	int res = ::pthread_rwlock_timedwrlock(&m_lock, 0);
-	switch (res) {
-	case 0:
+    if (m_type != eSYN_RWLOCK) return false;
+	switch (m_rwlock.WriteLock(_usec)) {
+	case common_library::types::eLOCK_SUCCESS:
         m_rwlockCount++;
 		return true;
-	case ::EDEADLK:
+    case common_library::types::eLOCK_ALREADY:
 		return true;
 	default:
 		return false;
@@ -211,14 +180,14 @@ void Synchronizer::Leave()
     case eSYN_MUTEX:
         while (m_mutexCount > 0)
         {
-            ::pthread_mutex_unlock(&m_mutex);
+            m_mutex.Unlock();
             m_mutexCount--;
         }
         break;
-    case eSYN_READWRITE:
+    case eSYN_RWLOCK:
         while (m_rwlockCount > 0)
         {
-            ::pthread_rwlock_unlock(&m_rwLock);
+            m_rwlock.Unlock();
             m_rwlockCount--;
         }
         break;
@@ -226,5 +195,67 @@ void Synchronizer::Leave()
         break;
     }    
 }
+
+///////////////////////////////////////////////////////////
+/// @brief	    Wait for condition (no timeout)
+/// @retval		true
+/// @retval		false
+/// @note
+///////////////////////////////////////////////////////////
+bool Synchronizer::Wait()
+{
+    if (m_type != eSYN_MUTEX) return;    
+	switch (m_mutex.Wait()) {
+	case common_library::types::eWAIT_SUCCESS:
+		return true;
+    case common_library::types::eLOCK_ALREADY:
+		return true;
+	default:
+		return false;
+	}
+}
+
+///////////////////////////////////////////////////////////
+/// @brief	    Wait for condition (with timeout)
+/// @param[in]	_usec Timeout (microsecond)
+/// @retval		true
+/// @retval		false
+/// @note
+///////////////////////////////////////////////////////////
+bool Synchronizer::Wait(unsigned long _usec)
+{
+    if (m_type != eSYN_MUTEX) return;    
+	switch (m_mutex.Wait(_usec)) {
+	case common_library::types::eWAIT_SUCCESS:
+		return true;
+    case common_library::types::eLOCK_ALREADY:
+		return true;
+	default:
+		return false;
+	}
+}
+
+///////////////////////////////////////////////////////////
+/// @brief	Notify that the condition is met (wait release)
+/// @return	None
+/// @note
+///////////////////////////////////////////////////////////
+void Synchronizer::Signal()
+{
+    if (m_type != eSYN_MUTEX) return;
+    m_mutex.Signal();
+}
+
+///////////////////////////////////////////////////////////
+/// @brief	Notify that the condition is met (wait release)
+/// @return	None
+/// @note
+///////////////////////////////////////////////////////////
+void Synchronizer::Broadcast()
+{
+    if (m_type != eSYN_MUTEX) return;
+    m_mutex.Broadcast();
+}
+
 } // namespace thread
 } // namespace common_library

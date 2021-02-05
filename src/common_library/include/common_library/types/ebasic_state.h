@@ -20,8 +20,8 @@ namespace types {
 enum eBasicState
 {
     eSTATE_IDLE = 0,
-    eSTATE_STAND = 1,
-    eSTATE_WALK = 2
+    eSTATE_STAND,
+    eSTATE_WALK
 };
 
 ///////////////////////////////////////////////////////////

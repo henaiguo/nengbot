@@ -6,6 +6,8 @@
 ///////////////////////////////////////////////////////////
 
 #include <common_library/thread/rwlock.h>
+
+#include <cstdio>
 #include <cerrno>
 
 namespace common_library {
@@ -37,8 +39,7 @@ RWLock::~RWLock()
 ///////////////////////////////////////////////////////////
 common_library::types::eLockResult RWLock::ReadLock()
 {
-	int r = ::pthread_rwlock_rdlock(&m_lock);
-	switch (r) {
+	switch (::pthread_rwlock_rdlock(&m_lock)) {
 	case 0:
 		return eLOCK_SUCCESS;
 	case EDEADLK:
@@ -57,8 +58,7 @@ common_library::types::eLockResult RWLock::ReadLock()
 common_library::types::eLockResult RWLock::ReadLock(unsigned long _usec)
 {
     // TODO:
-	int r = ::pthread_rwlock_timedrdlock(&m_lock, 0);
-	switch (r) {
+	switch (::pthread_rwlock_timedrdlock(&m_lock, 0)) {
 	case 0:
 		return common_library::types::eLOCK_SUCCESS;
 	case EDEADLK:
@@ -77,8 +77,7 @@ common_library::types::eLockResult RWLock::ReadLock(unsigned long _usec)
 ///////////////////////////////////////////////////////////
 common_library::types::eLockResult RWLock::WriteLock()
 {
-	int r = ::pthread_rwlock_wrlock(&m_lock);
-	switch (r) {
+	switch (::pthread_rwlock_wrlock(&m_lock)) {
 	case 0:
 		return common_library::types::eLOCK_SUCCESS;
 	case EDEADLK:
@@ -96,8 +95,7 @@ common_library::types::eLockResult RWLock::WriteLock()
 ///////////////////////////////////////////////////////////
 common_library::types::eLockResult RWLock::WriteLock(unsigned long _usec)
 {
-	int r = ::pthread_rwlock_timedwrlock(&m_lock, &ts);
-	switch (r) {
+	switch (::pthread_rwlock_timedwrlock(&m_lock, &ts)) {
 	case 0:
 		return common_library::types::eLOCK_SUCCESS;
 	case EDEADLK:

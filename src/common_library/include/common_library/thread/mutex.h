@@ -8,6 +8,7 @@
 #define MUTEX_H
 
 #include <common_library/types/elock_result.h>
+#include <common_library/types/ewait_result.h>
 #include <pthread.h>
 
 namespace common_library {
@@ -50,15 +51,47 @@ public:
 	common_library::types::eLockResult Lock(unsigned long _usec);
 
 	///////////////////////////////////////////////////////////
-	/// @brief		Unlock
-	/// @return		None
+	/// @brief	Unlock
+	/// @return	None
 	/// @note
 	///////////////////////////////////////////////////////////
 	void Unlock();
 
-protected:
+	///////////////////////////////////////////////////////////
+	/// @brief	Wait for condition (no timeout)
+	/// @return	common_library::types::eWaitResult
+	/// @note
+	///////////////////////////////////////////////////////////
+	common_library::types::eWaitResult Wait();
+
+	///////////////////////////////////////////////////////////
+	/// @brief	    Wait for condition (with timeout)
+	/// @param[in]	_usec Timeout (microsecond)
+	/// @return		common_library::types::eWaitResult
+	/// @note
+	///////////////////////////////////////////////////////////
+	common_library::types::eWaitResult Wait(unsigned long _usec);
+
+	///////////////////////////////////////////////////////////
+	/// @brief	Notify that the condition is met (wait release)
+	/// @return	None
+	/// @note
+	///////////////////////////////////////////////////////////
+	void Signal();
+
+	///////////////////////////////////////////////////////////
+	/// @brief	Notify that the condition is met (wait release)
+	/// @return	None
+	/// @note
+	///////////////////////////////////////////////////////////
+	void Broadcast();
+
+private:
     /// POSIX mutex
     ::pthread_mutex_t m_mutex;
+
+    /// POSIX condition
+    ::pthread_cond_t m_condition;
 };
 } // namespace thread
 } // namespace common_library

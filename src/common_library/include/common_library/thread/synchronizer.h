@@ -7,88 +7,113 @@
 #ifndef SYNCHRONIZER_H
 #define SYNCHRONIZER_H
 
-#include <pthread.h>
+#include <common_library/thread/mutex.h>
+#include <common_library/thread/rwlock.h>
 
-#define SYN_ENTER_RETURN(synobj, ret) \
-	common_library::library::Synchronizer synobj(eSYN_MUTEX); \
-	if (synobj.Enter() == false) { \
+#define SYN_ENTER_RETURN(mutex, synobj, ret) \
+	common_library::thread::Synchronizer synobj(mutex); \
+	if (!synobj.Enter()) { \
 		return ret; \
 	}
 
-#define SYN_ENTER_RETURN_TIMEOUT(synobj, timeout, ret) \
-	common_library::library::Synchronizer synobj(eSYN_MUTEX); \
-	if (synobj.Enter(timeout) == false) { \
+#define SYN_ENTER_RETURN_TIMEOUT(mutex, synobj, timeout, ret) \
+	common_library::thread::Synchronizer synobj(mutex); \
+	if (!synobj.Enter(timeout)) { \
 		return ret; \
 	}
 
-#define SYN_ENTER(synobj) \
-	common_library::library::Synchronizer synobj(eSYN_MUTEX); \
-	if (synobj.Enter() == false) { \
+#define SYN_ENTER(mutex, synobj) \
+	common_library::thread::Synchronizer synobj(mutex); \
+	if (!synobj.Enter()) { \
 		return; \
 	}
 
-#define SYN_ENTER_TIMEOUT(synobj, timeout) \
-	common_library::library::Synchronizer synobj(eSYN_MUTEX); \
-	if (synobj.Enter(timeout) == false) { \
+#define SYN_ENTER_TIMEOUT(mutex, synobj, timeout) \
+	common_library::thread::Synchronizer synobj(mutex); \
+	if (!synobj.Enter(timeout)) { \
 		return; \
+	}
+
+#define SYN_READ_ENTER(rwlock, synobj) \
+	common_library::thread::Synchronizer synobj(rwlock); \
+	if (!synobj.ReadEnter()) { \
+		return; \
+	}
+
+#define SYN_READ_ENTER_TIMEOUT(rwlock, synobj, timeout) \
+	common_library::thread::Synchronizer synobj(rwlock); \
+	if (!synobj.ReadEnter(timeout)) { \
+		return; \
+	}
+
+#define SYN_READ_ENTER_RETURN(rwlock, synobj, ret) \
+	common_library::thread::Synchronizer synobj(rwlock); \
+	if (!synobj.ReadEnter()) { \
+		return ret; \
+	}
+
+#define SYN_READ_ENTER_RETURN_TIMEOUT(rwlock, synobj, timeout, ret) \
+	common_library::thread::Synchronizer synobj(rwlock); \
+	if (!synobj.ReadEnter(timeout)) { \
+		return ret; \
+	}
+
+#define SYN_WRITE_ENTER(rwlock, synobj) \
+	common_library::thread::Synchronizer synobj(rwlock); \
+	if (!synobj.WriteEnter()) { \
+		return; \
+	}
+
+#define SYN_WRITE_ENTER_TIMEOUT(rwlock, synobj, timeout) \
+	common_library::thread::Synchronizer synobj(rwlock); \
+	if (!synobj.WriteEnter(timeout)) { \
+		return; \
+	}
+
+#define SYN_WRITE_ENTER_RETURN(rwlock, synobj, ret) \
+	common_library::thread::Synchronizer synobj(rwlock); \
+	if (!synobj.WriteEnter()) { \
+		return ret; \
+	}
+
+#define SYN_WRITE_ENTER_RETURN_TIMEOUT(rwlock, synobj, timeout, ret) \
+	common_library::thread::Synchronizer synobj(rwlock); \
+	if (!synobj.WriteEnter(timeout)) { \
+		return ret; \
 	}
 
 #define SYN_EXIT(synobj) \
 	synobj.Leave();
 
-#define READ_ENTER_RETURN(synobj, ret) \
-	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
-	if (synobj.ReadEnter() == false) { \
-		return ret; \
-	}
-
-#define READ_ENTER_RETURN_TIMEOUT(synobj, timeout, ret) \
-	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
-	if (synobj.ReadEnter(timeout) == false) { \
-		return ret; \
-	}
-
-#define READ_ENTER(synobj) \
-	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
-	if (synobj.ReadEnter() == false) { \
+#define SYN_WAIT(mutex, synobj) \
+	common_library::thread::Synchronizer synobj(mutex); \
+	if (!synobj.Wait()) { \
 		return; \
 	}
 
-#define READ_ENTER_TIMEOUT(synobj, timeout) \
-	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
-	if (synobj.ReadEnter(timeout) == false) { \
-		return; \
-	}
-
-#define READ_EXIT(synobj) \
-	synobj.Leave();
-
-#define WRITE_ENTER_RETURN(synobj, ret) \
-	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
-	if (synobj.WriteEnter() == false) { \
+#define SYN_WAIT_RETURN(mutex, synobj, ret) \
+	common_library::thread::Synchronizer synobj(mutex); \
+	if (!synobj.Wait()) { \
 		return ret; \
 	}
 
-#define WRITE_ENTER_RETURN_TIMEOUT(synobj, timeout, ret) \
-	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
-	if (synobj.WriteEnter(timeout) == false) { \
+#define SYN_WAIT_TIMEOUT(mutex, synobj, timeout) \
+	common_library::thread::Synchronizer synobj(mutex); \
+	if (!synobj.Wait(timeout)) { \
+		return; \
+	}
+
+#define SYN_WAIT_RETURN_TIMEOUT(mutex, synobj, timeout, ret) \
+	common_library::thread::Synchronizer synobj(mutex); \
+	if (!synobj.Wait(timeout)) { \
 		return ret; \
 	}
 
-#define WRITE_ENTER(synobj) \
-	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
-	if (synobj.WriteEnter() == false) { \
-		return; \
-	}
+#define SYN_SIGNAL(synobj) \
+	synobj.Signal();
 
-#define WRITE_ENTER_TIMEOUT(synobj, timeout) \
-	common_library::library::Synchronizer synobj(eSYN_READWRITE); \
-	if (synobj.WriteEnter(timeout) == false) { \
-		return; \
-	}
-
-#define WRITE_EXIT(synobj) \
-	synobj.Leave();
+#define SYN_BROADCAST(synobj) \
+	synobj.Broadcast();
 
 namespace common_library {
 namespace thread {
@@ -100,31 +125,21 @@ namespace thread {
 class Synchronizer
 {
 public:
-	///////////////////////////////////////////////////////////
-	/// @enum   eSynchronizeType
-	/// @brief	Synchronize type
-	/// @note
-	///////////////////////////////////////////////////////////
-    enum eSynchronizeType
-    {
-        eSYN_MUTEX = 0,
-        eSYN_READWRITE
-    };
-
     ///////////////////////////////////////////////////////////
     /// @brief  Default constructor
+	/// @param[in]	_mutex Mutex object
     /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
-    Synchronizer();
+    Synchronizer(Mutex& _mutex);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Default constructor
-	/// @param[in]	_type eSynchronizeType
+	/// @param[in]	_rwlock RWLock object
     /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
-    Synchronizer(eSynchronizeType _type);
+    Synchronizer(RWLock& _rwlock);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Destructor
@@ -191,21 +206,81 @@ public:
 	///////////////////////////////////////////////////////////
 	void Leave();
 
+	///////////////////////////////////////////////////////////
+	/// @brief	Wait for condition (no timeout)
+	/// @retval		true
+	/// @retval		false
+	/// @note
+	///////////////////////////////////////////////////////////
+	bool Wait();
+
+	///////////////////////////////////////////////////////////
+	/// @brief	    Wait for condition (with timeout)
+	/// @param[in]	_usec Timeout (microsecond)
+	/// @retval		true
+	/// @retval		false
+	/// @note
+	///////////////////////////////////////////////////////////
+	bool Wait(unsigned long _usec);
+
+	///////////////////////////////////////////////////////////
+	/// @brief	Notify that the condition is met (wait release)
+	/// @return	None
+	/// @note
+	///////////////////////////////////////////////////////////
+	void Signal();
+
+	///////////////////////////////////////////////////////////
+	/// @brief	Notify that the condition is met (wait release)
+	/// @return	None
+	/// @note
+	///////////////////////////////////////////////////////////
+	void Broadcast();
+
 private:
-    /// Synchronize type
-    eSynchronizeType m_type;
+	///////////////////////////////////////////////////////////
+	/// @enum	eSynchronizeType
+	/// @brief	Synchronize type
+	/// @note
+	///////////////////////////////////////////////////////////
+	enum eSynchronizeType
+	{
+		eSYN_MUTEX = 0,
+		eSYN_RWLOCK
+	};
 
-    /// POSIX mutex
-    ::pthread_mutex_t m_mutex;
+	/// eSynchronizeType
+	eSynchronizeType m_type;
 
-    /// POSIX rwlock
-    ::pthread_rwlock_t m_rwlock;
+    /// Mutex
+    Mutex& m_mutex;
+
+	/// RWlock
+	RWLock& m_rwlock;
 
     /// Number of times the SYN sction has been entered(mutex)
     unsigned long m_mutexCount;
 
     /// Number of times the SYN sction has been entered(rwlock)
     unsigned long m_rwlockCount;
+
+	///////////////////////////////////////////////////////////
+	/// @brief		Constructor
+	/// @note		Constructor prohibited
+	///////////////////////////////////////////////////////////
+	Synchronizer();
+
+	///////////////////////////////////////////////////////////
+	/// @brief		Copy constructor
+	/// @note		Copy prohibited
+	///////////////////////////////////////////////////////////
+	Synchronizer(const synchronized& _src);
+
+	///////////////////////////////////////////////////////////
+	/// @brief		Assignment operator
+	/// @note		Substitution prohibited
+	///////////////////////////////////////////////////////////
+	Synchronizer& operator=(const Synchronizer& _src)
 };
 } // namespace thread
 } // namespace common_library

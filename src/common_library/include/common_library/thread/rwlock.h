@@ -71,7 +71,7 @@ public:
 	///////////////////////////////////////////////////////////
 	void Unlock();
 
-protected:
+private:
     /// POSIX mutex
     ::pthread_rwlock_t m_lock;
 };

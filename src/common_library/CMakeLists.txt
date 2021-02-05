@@ -119,21 +119,39 @@ include_directories(
 )
 
 ## Declare a C++ library
+add_library(common_library_error
+  src/error.cpp
+)
+
 add_library(common_library_i2c
   src/io/i2c.cpp
 )
 
-add_library(common_library_error
-  src/error.cpp
+add_library(common_library_mutex
+  src/thread/mutex.cpp
+)
+
+add_library(common_library_rwlock
+  src/thread/rwlock.cpp
+)
+
+add_library(common_library_synchronizer
+  src/thread/synchronizer.cpp
 )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
 add_dependencies(common_library_i2c common_library_error)
+add_dependencies(common_library_synchronizer common_library_mutex common_library_rwlock)
 
 # target_link_libraries(common_library_i2c
-#   ${catkin_LIBRARIES}
+#   common_library_error
+# )
+
+# target_link_libraries(common_library_synchronizer
+#   common_library_mutex
+#   common_library_rwlock
 # )
 
 ## Declare a C++ executable
