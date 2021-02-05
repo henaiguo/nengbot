@@ -5,19 +5,19 @@
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
 
-#include <common_library/thread/Synchronizer.h>
+#include <common_library/thread/synchronizer.h>
 
 namespace common_library {
 namespace thread {
-
 ///////////////////////////////////////////////////////////
 /// @brief  Default constructor
 /// @param[in]	_mutex Mutex object
 /// @return None
 /// @note
 ///////////////////////////////////////////////////////////
-Synchronizer::Synchronizer(Mutex& _mutex)
-    : m_type(eSYN_MUTEX), m_mutex(_mutex), m_mutexCount(0UL)
+Synchronizer::Synchronizer(Mutex& _mutex, RWLock& _rwlock)
+    : m_mutex(_mutex), m_mutexCount(0UL), m_rwlock(_rwlock), m_rwlockCount(0UL)
+//    , m_type(eSYN_MUTEX)
 {
     // None
 }
@@ -28,11 +28,12 @@ Synchronizer::Synchronizer(Mutex& _mutex)
 /// @return None
 /// @note
 ///////////////////////////////////////////////////////////
-Synchronizer::Synchronizer(RWLock& _rwlock)
-    : m_type(eSYN_RWLOCK), m_rwlock(_rwlock), m_rwlockCount(0UL)
-{
+//Synchronizer::Synchronizer(RWLock& _rwlock)
+//    : m_rwlock(_rwlock), m_rwlockCount(0UL), m_mutex(NULL), m_mutexCount(0UL)
+//    , m_type(eSYN_RWLOCK)
+//{
     // None
-}
+//}
 
 ///////////////////////////////////////////////////////////
 /// @brief  Destructor
@@ -204,7 +205,7 @@ void Synchronizer::Leave()
 ///////////////////////////////////////////////////////////
 bool Synchronizer::Wait()
 {
-    if (m_type != eSYN_MUTEX) return;    
+    if (m_type != eSYN_MUTEX) return false;    
 	switch (m_mutex.Wait()) {
 	case common_library::types::eWAIT_SUCCESS:
 		return true;
@@ -224,7 +225,7 @@ bool Synchronizer::Wait()
 ///////////////////////////////////////////////////////////
 bool Synchronizer::Wait(unsigned long _usec)
 {
-    if (m_type != eSYN_MUTEX) return;    
+    if (m_type != eSYN_MUTEX) return false;    
 	switch (m_mutex.Wait(_usec)) {
 	case common_library::types::eWAIT_SUCCESS:
 		return true;

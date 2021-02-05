@@ -131,7 +131,7 @@ public:
     /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
-    Synchronizer(Mutex& _mutex);
+    Synchronizer(Mutex& _mutex, RWLock& _rwlock);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Default constructor
@@ -139,7 +139,7 @@ public:
     /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
-    Synchronizer(RWLock& _rwlock);
+    //Synchronizer(RWLock& _rwlock);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Destructor
@@ -238,25 +238,25 @@ public:
 	void Broadcast();
 
 private:
-	///////////////////////////////////////////////////////////
-	/// @enum	eSynchronizeType
-	/// @brief	Synchronize type
-	/// @note
-	///////////////////////////////////////////////////////////
-	enum eSynchronizeType
-	{
-		eSYN_MUTEX = 0,
-		eSYN_RWLOCK
-	};
-
-	/// eSynchronizeType
-	eSynchronizeType m_type;
+    ///////////////////////////////////////////////////////////
+    /// @enum       eSynchronizeType
+    /// @brief      Synchronize type
+    /// @note
+    ///////////////////////////////////////////////////////////
+    enum eSynchronizeType
+    {
+        eSYN_MUTEX = 0,
+        eSYN_RWLOCK
+    };
+        
+    /// eSynchronizeType
+    eSynchronizeType m_type;
 
     /// Mutex
     Mutex& m_mutex;
 
-	/// RWlock
-	RWLock& m_rwlock;
+    /// RWlock
+    RWLock& m_rwlock;
 
     /// Number of times the SYN sction has been entered(mutex)
     unsigned long m_mutexCount;
@@ -264,23 +264,23 @@ private:
     /// Number of times the SYN sction has been entered(rwlock)
     unsigned long m_rwlockCount;
 
-	///////////////////////////////////////////////////////////
-	/// @brief		Constructor
-	/// @note		Constructor prohibited
-	///////////////////////////////////////////////////////////
-	Synchronizer();
+    ///////////////////////////////////////////////////////////
+    /// @brief      Constructor
+    /// @note       Constructor prohibited
+    ///////////////////////////////////////////////////////////
+    Synchronizer();
 
-	///////////////////////////////////////////////////////////
-	/// @brief		Copy constructor
-	/// @note		Copy prohibited
-	///////////////////////////////////////////////////////////
-	Synchronizer(const synchronized& _src);
+    ///////////////////////////////////////////////////////////
+    /// @brief      Copy constructor
+    /// @note       Copy prohibited
+    ///////////////////////////////////////////////////////////
+    Synchronizer(const Synchronizer& _src);
 
-	///////////////////////////////////////////////////////////
-	/// @brief		Assignment operator
-	/// @note		Substitution prohibited
-	///////////////////////////////////////////////////////////
-	Synchronizer& operator=(const Synchronizer& _src)
+    ///////////////////////////////////////////////////////////
+    /// @brief      Assignment operator
+    /// @note       Substitution prohibited
+    ///////////////////////////////////////////////////////////
+    Synchronizer& operator=(const Synchronizer& _src);
 };
 } // namespace thread
 } // namespace common_library
