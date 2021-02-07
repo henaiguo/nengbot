@@ -8,32 +8,20 @@
 #include <common_library/thread/synchronizer.h>
 
 namespace common_library {
-namespace thread {
+namespace thread {    
 ///////////////////////////////////////////////////////////
 /// @brief  Default constructor
+/// @param[in]	_type Synchronize type
 /// @param[in]	_mutex Mutex object
-/// @return None
+/// @param[in]	_rwlock RWLock object
+/// @return	None
 /// @note
 ///////////////////////////////////////////////////////////
-Synchronizer::Synchronizer(Mutex& _mutex, RWLock& _rwlock)
-    : m_mutex(_mutex), m_mutexCount(0UL), m_rwlock(_rwlock), m_rwlockCount(0UL)
-//    , m_type(eSYN_MUTEX)
+Synchronizer::Synchronizer(eSynchronizeType _type, Mutex& _mutex, RWLock& _rwlock)
+    : m_type(_type), m_mutex(_mutex), m_rwlock(_rwlock), m_mutexCount(0UL), m_rwlockCount(0UL)
 {
     // None
 }
-
-///////////////////////////////////////////////////////////
-/// @brief  Default constructor
-/// @param[in]	_rwlock RWLock object
-/// @return None
-/// @note
-///////////////////////////////////////////////////////////
-//Synchronizer::Synchronizer(RWLock& _rwlock)
-//    : m_rwlock(_rwlock), m_rwlockCount(0UL), m_mutex(NULL), m_mutexCount(0UL)
-//    , m_type(eSYN_RWLOCK)
-//{
-    // None
-//}
 
 ///////////////////////////////////////////////////////////
 /// @brief  Destructor
@@ -46,9 +34,9 @@ Synchronizer::~Synchronizer()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Enter guard section (no timeout)
-/// @retval		true
-/// @retval		false
+/// @brief  Enter guard section (no timeout)
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool Synchronizer::Enter()
@@ -66,10 +54,10 @@ bool Synchronizer::Enter()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Enter guard section (timeout)
-/// @param[in]	_usec Timeout (microsecond)
-/// @retval		true
-/// @retval		false
+/// @brief  Enter guard section (timeout)
+/// @param[in]  _usec Timeout (microsecond)
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool Synchronizer::Enter(unsigned long _usec)
@@ -88,9 +76,9 @@ bool Synchronizer::Enter(unsigned long _usec)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Enter the read guard interval (no timeout)
-/// @retval		true
-/// @retval		false
+/// @brief  Enter the read guard interval (no timeout)
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool Synchronizer::ReadEnter()
@@ -108,9 +96,9 @@ bool Synchronizer::ReadEnter()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Enter write guard interval (no timeout)
-/// @retval		true
-/// @retval		false
+/// @brief  Enter write guard interval (no timeout)
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool Synchronizer::WriteEnter()
@@ -128,10 +116,10 @@ bool Synchronizer::WriteEnter()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Enter the read guard section (with timeout)
-/// @param[in]	_usec Timeout (microsecond)
-/// @retval		true
-/// @retval		false
+/// @brief  Enter the read guard section (with timeout)
+/// @param[in]  _usec Timeout (microsecond)
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool Synchronizer::ReadEnter(unsigned long _usec)
@@ -149,10 +137,10 @@ bool Synchronizer::ReadEnter(unsigned long _usec)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Enter the write guard section (with timeout)
-/// @param[in]	_usec Timeout (microsecond)
-/// @retval		true
-/// @retval		false
+/// @brief  Enter the write guard section (with timeout)
+/// @param[in]  _usec Timeout (microsecond)
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool Synchronizer::WriteEnter(unsigned long _usec)
@@ -170,8 +158,8 @@ bool Synchronizer::WriteEnter(unsigned long _usec)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Exit the guard section
-/// @return		None
+/// @brief  Exit the guard section
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 void Synchronizer::Leave()
@@ -198,9 +186,9 @@ void Synchronizer::Leave()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief	    Wait for condition (no timeout)
-/// @retval		true
-/// @retval		false
+/// @brief  Wait for condition (no timeout)
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool Synchronizer::Wait()
@@ -217,10 +205,10 @@ bool Synchronizer::Wait()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief	    Wait for condition (with timeout)
-/// @param[in]	_usec Timeout (microsecond)
-/// @retval		true
-/// @retval		false
+/// @brief  Wait for condition (with timeout)
+/// @param[in]  _usec Timeout (microsecond)
+/// @retval true
+/// @retval false
 /// @note
 ///////////////////////////////////////////////////////////
 bool Synchronizer::Wait(unsigned long _usec)
@@ -237,8 +225,8 @@ bool Synchronizer::Wait(unsigned long _usec)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief	Notify that the condition is met (wait release)
-/// @return	None
+/// @brief  Notify that the condition is met (wait release)
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 void Synchronizer::Signal()
@@ -248,8 +236,8 @@ void Synchronizer::Signal()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief	Notify that the condition is met (wait release)
-/// @return	None
+/// @brief  Notify that the condition is met (wait release)
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 void Synchronizer::Broadcast()

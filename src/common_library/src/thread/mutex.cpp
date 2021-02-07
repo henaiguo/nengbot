@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////
-/// @file   mutex.cpp
-/// @brief  Mutex
-/// @author henaiguo
+/// @file	mutex.cpp
+/// @brief	Mutex
+/// @author	henaiguo
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
 
@@ -13,24 +13,24 @@
 namespace common_library {
 namespace thread {
 ///////////////////////////////////////////////////////////
-/// @brief  Default constructor
-/// @return None
+/// @brief	Default constructor
+/// @return	None
 /// @note
 ///////////////////////////////////////////////////////////
 Mutex::Mutex()
 {
-    ::pthread_mutex_init(&m_mutex, NULL);
+	::pthread_mutex_init(&m_mutex, NULL);
 	::pthread_cond_init(&m_condition, NULL);
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief  Destructor
-/// @return None
+/// @brief	Destructor
+/// @return	None
 /// @note
 ///////////////////////////////////////////////////////////
 Mutex::~Mutex()
 {
-    ::pthread_mutex_destroy(&m_mutex);
+	::pthread_mutex_destroy(&m_mutex);
 	::pthread_cond_destroy(&m_condition);
 }
 
@@ -73,13 +73,13 @@ common_library::types::eLockResult Mutex::Lock(unsigned long _usec)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Unlock
-/// @return		None
+/// @brief	Unlock
+/// @return	None
 /// @note
 ///////////////////////////////////////////////////////////
 void Mutex::Unlock()
 {
-    ::pthread_mutex_unlock(&m_mutex);
+	::pthread_mutex_unlock(&m_mutex);
 }
 
 ///////////////////////////////////////////////////////////
@@ -90,14 +90,14 @@ void Mutex::Unlock()
 common_library::types::eWaitResult Mutex::Wait()
 {
 	return ::pthread_cond_wait(&m_condition, &m_mutex) !=0 ? 
-				common_library::types::eWAIT_ERROR :
-				common_library::types::eWAIT_SUCCESS;
+		common_library::types::eWAIT_ERROR :
+		common_library::types::eWAIT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief	    Wait for condition (with timeout)
+/// @brief	Wait for condition (with timeout)
 /// @param[in]	_usec Timeout (microsecond)
-/// @return		common_library::types::eWaitResult
+/// @return	common_library::types::eWaitResult
 /// @note
 ///////////////////////////////////////////////////////////
 common_library::types::eWaitResult Mutex::Wait(unsigned long _usec)

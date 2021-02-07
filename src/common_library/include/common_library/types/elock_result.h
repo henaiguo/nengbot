@@ -13,7 +13,7 @@
 namespace common_library {
 namespace types {
 ///////////////////////////////////////////////////////////
-/// @enum   eLockResult
+/// @enum	eLockResult
 /// @brief	Lock result
 /// @note
 ///////////////////////////////////////////////////////////
@@ -26,9 +26,9 @@ enum eLockResult
 };
 
 ///////////////////////////////////////////////////////////
-/// @brief		enum Is a string
+/// @brief	enum Is a string
 /// @param[in]	_enum enum value
-/// @return		std::string
+/// @return	std::string
 /// @note
 ///////////////////////////////////////////////////////////
 static std::string ToString(eLockResult _enum)
@@ -48,11 +48,11 @@ static std::string ToString(eLockResult _enum)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Turn a string into an enum
+/// @brief	Turn a string into an enum
 /// @param[in]	_string String
 /// @param[out]	_enum enum value
-/// @retval		true
-/// @retval		false
+/// @retval	true
+/// @retval	false
 /// @note
 ///////////////////////////////////////////////////////////
 static bool ToEnum(const std::string& _string, eLockResult& _enum)

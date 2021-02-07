@@ -13,7 +13,7 @@
 namespace common_library {
 namespace types {
 ///////////////////////////////////////////////////////////
-/// @enum   eWaitResult
+/// @enum	eWaitResult
 /// @brief	Wait result
 /// @note
 ///////////////////////////////////////////////////////////
@@ -25,9 +25,9 @@ enum eWaitResult
 };
 
 ///////////////////////////////////////////////////////////
-/// @brief		enum Is a string
+/// @brief	enum Is a string
 /// @param[in]	_enum enum value
-/// @return		std::string
+/// @return	std::string
 /// @note
 ///////////////////////////////////////////////////////////
 static std::string ToString(eWaitResult _enum)
@@ -45,11 +45,11 @@ static std::string ToString(eWaitResult _enum)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Turn a string into an enum
+/// @brief	Turn a string into an enum
 /// @param[in]	_string String
 /// @param[out]	_enum enum value
-/// @retval		true
-/// @retval		false
+/// @retval	true
+/// @retval	false
 /// @note
 ///////////////////////////////////////////////////////////
 static bool ToEnum(const std::string& _string, eWaitResult& _enum)

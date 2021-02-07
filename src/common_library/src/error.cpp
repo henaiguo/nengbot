@@ -13,7 +13,7 @@
 
 namespace common_library {
 ///////////////////////////////////////////////////////////
-/// @brief		Generate error object (error occurred)
+/// @brief	Generate error object (error occurred)
 /// @param[in]	_format, ... Error message
 ///////////////////////////////////////////////////////////
 Error Error::CreateError(const char* _format, ...)
@@ -31,7 +31,7 @@ Error Error::CreateError(const char* _format, ...)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Generate an error object (no error)
+/// @brief	Generate an error object (no error)
 /// @param[in]	None
 ///////////////////////////////////////////////////////////
 Error Error::CreateNoError()
@@ -41,9 +41,9 @@ Error Error::CreateNoError()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		constructor
+/// @brief	constructor
 /// @param[in]	None
-/// @note		No error
+/// @note	No error
 ///////////////////////////////////////////////////////////
 Error::Error()
 	: m_errorMessage(""), m_isError(false)
@@ -51,9 +51,9 @@ Error::Error()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		constructor
+/// @brief	constructor
 /// @param[in]	_message Error message
-/// @note		Error occurred
+/// @note	Error occurred
 ///////////////////////////////////////////////////////////
 Error::Error(const std::string& _message)
 	: m_errorMessage(_message), m_isError(true)
@@ -62,8 +62,8 @@ Error::Error(const std::string& _message)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Destructor
-/// @return		None
+/// @brief	Destructor
+/// @return	None
 ///////////////////////////////////////////////////////////
 Error::~Error()
 {
@@ -71,9 +71,9 @@ Error::~Error()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Get message
+/// @brief	Get message
 /// @param[in]	None
-/// @return		message
+/// @return	std::string
 ///////////////////////////////////////////////////////////
 const std::string &Error::Message() const
 {
@@ -81,9 +81,9 @@ const std::string &Error::Message() const
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Check if there is an error
+/// @brief	Check if there is an error
 /// @param[in]	None
-/// @note		True on error
+/// @note	True on error
 ///////////////////////////////////////////////////////////
 Error::operator bool() const
 {
@@ -91,9 +91,9 @@ Error::operator bool() const
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief		Assignment operator
+/// @brief	Assignment operator
 /// @param[in]	_error Original error
-/// @return		Error&
+/// @return	Error&
 /// @note
 ///////////////////////////////////////////////////////////
 Error& Error::operator=(const Error& _error)

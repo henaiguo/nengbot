@@ -13,8 +13,8 @@
 namespace common_library {
 namespace types {
 ///////////////////////////////////////////////////////////
-/// @enum eBasicState
-/// @brief Baisc state type
+/// @enum   eBasicState
+/// @brief  Baisc state type
 /// @note
 ///////////////////////////////////////////////////////////
 enum eBasicState

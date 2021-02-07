@@ -15,35 +15,35 @@ namespace common_library {
 namespace thread {
 ///////////////////////////////////////////////////////////
 /// @class	Mutex
-/// @brief  Mutex
+/// @brief	Mutex
 /// @note
 ///////////////////////////////////////////////////////////
 class Mutex
 {
 public:
-    ///////////////////////////////////////////////////////////
-    /// @brief  Default constructor
-    /// @return None
-    /// @note
-    ///////////////////////////////////////////////////////////
-    Mutex();
+	///////////////////////////////////////////////////////////
+	/// @brief	Default constructor
+	/// @return	None
+	/// @note
+	///////////////////////////////////////////////////////////
+	Mutex();
 
-    ///////////////////////////////////////////////////////////
-    /// @brief  Destructor
-    /// @return None
-    /// @note
-    ///////////////////////////////////////////////////////////
-    virtual ~Mutex();
+	///////////////////////////////////////////////////////////
+	/// @brief	Destructor
+	/// @return	None
+	/// @note
+	///////////////////////////////////////////////////////////
+	virtual ~Mutex();
 
 	///////////////////////////////////////////////////////////	
-    /// @brief	Acquire lock
+	/// @brief	Acquire lock
 	/// @return	common_library::types::eLockResult
 	/// @note
 	///////////////////////////////////////////////////////////
 	common_library::types::eLockResult Lock();
 
 	///////////////////////////////////////////////////////////	
-    /// @brief	Acquire lock (with timeout)
+	/// @brief	Acquire lock (with timeout)
 	/// @param[in]	_usec Timeout (microsecond)
 	/// @return	common_library::types::eLockResult
 	/// @note
@@ -65,9 +65,9 @@ public:
 	common_library::types::eWaitResult Wait();
 
 	///////////////////////////////////////////////////////////
-	/// @brief	    Wait for condition (with timeout)
+	/// @brief	Wait for condition (with timeout)
 	/// @param[in]	_usec Timeout (microsecond)
-	/// @return		common_library::types::eWaitResult
+	/// @return	common_library::types::eWaitResult
 	/// @note
 	///////////////////////////////////////////////////////////
 	common_library::types::eWaitResult Wait(unsigned long _usec);
@@ -87,11 +87,11 @@ public:
 	void Broadcast();
 
 private:
-    /// POSIX mutex
-    ::pthread_mutex_t m_mutex;
+	/// POSIX mutex
+	::pthread_mutex_t m_mutex;
 
-    /// POSIX condition
-    ::pthread_cond_t m_condition;
+	/// POSIX condition
+	::pthread_cond_t m_condition;
 };
 } // namespace thread
 } // namespace common_library

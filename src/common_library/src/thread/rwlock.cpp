@@ -13,8 +13,8 @@
 namespace common_library {
 namespace thread {    
 ///////////////////////////////////////////////////////////
-/// @brief      Default constructor
-/// @return     None
+/// @brief  Default constructor
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 RWLock::RWLock()
@@ -23,8 +23,8 @@ RWLock::RWLock()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief      Destructor
-/// @return     None
+/// @brief  Destructor
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 RWLock::~RWLock()
@@ -33,8 +33,8 @@ RWLock::~RWLock()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief      Acquire read lock
-/// @return     common_library::types::eLockResult
+/// @brief  Acquire read lock
+/// @return common_library::types::eLockResult
 /// @note
 ///////////////////////////////////////////////////////////
 common_library::types::eLockResult RWLock::ReadLock()
@@ -50,9 +50,9 @@ common_library::types::eLockResult RWLock::ReadLock()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief      Acquire read lock (with timeout)
+/// @brief  Acquire read lock (with timeout)
 /// @param[in]  _usec Timeout (microsecond)
-/// @return     common_library::types::eLockResult
+/// @return common_library::types::eLockResult
 /// @note
 ///////////////////////////////////////////////////////////
 common_library::types::eLockResult RWLock::ReadLock(unsigned long _usec)
@@ -71,8 +71,8 @@ common_library::types::eLockResult RWLock::ReadLock(unsigned long _usec)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief      Acquire write lock
-/// @return     common_library::types::eLockResult
+/// @brief  Acquire write lock
+/// @return common_library::types::eLockResult
 /// @note
 ///////////////////////////////////////////////////////////
 common_library::types::eLockResult RWLock::WriteLock()
@@ -88,9 +88,9 @@ common_library::types::eLockResult RWLock::WriteLock()
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief      Acquire write lock
+/// @brief  Acquire write lock
 /// @param[in]  _usec Timeout time (microsecond)
-/// @return     common_library::types::eLockResult
+/// @return common_library::types::eLockResult
 /// @note
 ///////////////////////////////////////////////////////////
 common_library::types::eLockResult RWLock::WriteLock(unsigned long _usec)
@@ -108,8 +108,8 @@ common_library::types::eLockResult RWLock::WriteLock(unsigned long _usec)
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief      Unlock
-/// @return     None
+/// @brief  Unlock
+/// @return None
 /// @note
 ///////////////////////////////////////////////////////////
 void RWLock::Unlock()
