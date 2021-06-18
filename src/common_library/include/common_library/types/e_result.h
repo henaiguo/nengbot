@@ -1,75 +1,71 @@
 ///////////////////////////////////////////////////////////
-/// @file	ewait_result.h
-/// @brief	Wait result
+/// @file	e_result.h
+/// @brief	Result type
 /// @author	henaiguo
-/// Copyright (C) 2013- henaiguo. All rights reserved.
+/// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
 
-#ifndef EWAIT_RESULT_H
-#define EWAIT_RESULT_H
+#ifndef E_RESULT_H
+#define E_RESULT_H
 
 #include <string>
 
 namespace common_library {
 namespace types {
 ///////////////////////////////////////////////////////////
-/// @enum	eWaitResult
-/// @brief	Wait result
+/// @enum   eResult
+/// @brief	Result type
 /// @note
 ///////////////////////////////////////////////////////////
-enum eWaitResult
+enum eResult
 {
-	eWAIT_ERROR = 0,
-	eWAIT_SUCCESS,
-	eWAIT_TIMEOUT
+	/// success
+	eSUCCESS = 0,
+	/// error
+	eERROR = 1
 };
 
 ///////////////////////////////////////////////////////////
-/// @brief	enum Is a string
+/// @brief		enum Is a string
 /// @param[in]	_enum enum value
-/// @return	std::string
+/// @return		char*
 /// @note
 ///////////////////////////////////////////////////////////
-static std::string ToString(eWaitResult _enum)
+static std::string ToString(eResult _enum)
 {
 	switch (_enum) {
-	case eWAIT_ERROR:
-		return "eWAIT_ERROR";
-	case eWAIT_SUCCESS:
-		return "eWAIT_SUCCESS";
-	case eWAIT_TIMEOUT:
-		return "eWAIT_TIMEOUT";
+	case eSUCCESS:
+		return "eSUCCESS";
+	case eERROR:
+		return "eERROR";
 	default:
 		return "INVALID_ENUM_VALUE";
 	}
 }
 
 ///////////////////////////////////////////////////////////
-/// @brief	Turn a string into an enum
+/// @brief		Turn a string into an enum
 /// @param[in]	_string String
 /// @param[out]	_enum enum value
-/// @retval	true
-/// @retval	false
+/// @retval		true
+/// @retval		false
 /// @note
 ///////////////////////////////////////////////////////////
-static bool ToEnum(const std::string& _string, eWaitResult& _enum)
+static bool ToEnum(const std::string& _string, eResult& _enum)
 {
-	if (_string == "eWAIT_ERROR") {
-		_enum = eWAIT_ERROR;
+	if (_string == "eSUCCESS") {
+		_enum = eSUCCESS;
 		return true;
 	}
-	else if (_string == "eWAIT_SUCCESS") {
-		_enum = eWAIT_SUCCESS;
-		return true;
-	}
-	else if (_string == "eWAIT_TIMEOUT") {
-		_enum = eWAIT_TIMEOUT;
+	else if (_string == "eERROR") {
+		_enum = eERROR;
 		return true;
 	}
 	return false;
 }
+
 } // namespace types
 } // namespace common_library
 
-#endif // EWAIT_RESULT_H
+#endif // E_RESULT_H
 

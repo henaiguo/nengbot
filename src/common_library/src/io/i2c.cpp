@@ -12,6 +12,8 @@
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
 
+using common_library::types::Result;
+
 namespace common_library {
 namespace io {
 ///////////////////////////////////////////////////////////
@@ -39,22 +41,22 @@ I2C::~I2C()
 /// @brief  Open i2c device
 /// @param[in]  _devName I2c device name
 /// @param[in]  _devAddr I2c device address
-/// @return common_library::Error
+/// @return common_library::types::Result
 /// @note
 ///////////////////////////////////////////////////////////
-common_library::Error I2C::Open(std::string _devName, uint8_t _devAddr)
+common_library::types::Result I2C::Open(std::string _devName, uint8_t _devAddr)
 {
     int fd = ::open(_devName.c_str(), O_RDWR);
     if (fd == INVALID_I2C_FD) {
-        return Error::CreateError("[I2C]Error in Open: Invalid device name(%s)", _devName.c_str());
+        return Result::CreateError("[I2C]Error in Open: Invalid device name(%s)", _devName.c_str());
     }
 
     if (::ioctl(fd, I2C_SLAVE, _devAddr) < 0) {
-        return Error::CreateError("[I2C]Error in Open: Invalid i2c address(0x%02x)", _devAddr);
+        return Result::CreateError("[I2C]Error in Open: Invalid i2c address(0x%02x)", _devAddr);
     }
 
     m_fd = fd;
-    return Error::CreateNoError();
+    return Result::CreateSuccess();
 }
 
 ///////////////////////////////////////////////////////////
@@ -94,10 +96,10 @@ int I2C::GetFD() const
 /// @brief  Read a single byte from i2c device
 /// @param[in]  _regAddr Register address
 /// @param[out] _data Read data
-/// @return common_library::Error
+/// @return common_library::types::Result
 /// @note
 ///////////////////////////////////////////////////////////
-common_library::Error I2C::ReadByte(uint8_t _regAddr, uint8_t* _data)
+common_library::types::Result I2C::ReadByte(uint8_t _regAddr, uint8_t* _data)
 {
     return ReadBytes(_regAddr, 1, _data);
 }
@@ -107,38 +109,38 @@ common_library::Error I2C::ReadByte(uint8_t _regAddr, uint8_t* _data)
 /// @param[in]  _regAddr Register address
 /// @param[in]  _count Number of bytes to read
 /// @param[out] _data Read data
-/// @return common_library::Error
+/// @return common_library::types::Result
 /// @note
 ///////////////////////////////////////////////////////////
-common_library::Error I2C::ReadBytes(uint8_t _regAddr, size_t _count, uint8_t* _data)
+common_library::types::Result I2C::ReadBytes(uint8_t _regAddr, size_t _count, uint8_t* _data)
 {
     if (!IsOpen()) {
-        return Error::CreateError("[I2C]Error in ReadBytes: Device hasn't open yet");
+        return Result::CreateError("[I2C]Error in ReadBytes: Device hasn't open yet");
     } 
 
     // Write register to device
     int ret = ::write(m_fd, &_regAddr, 1);
     if (ret != 1) {
-        return Error::CreateError("[I2C]Error in ReadBytes: Failed to write to i2c device");
+        return Result::CreateError("[I2C]Error in ReadBytes: Failed to write to i2c device");
     }
 
     // Then read the response
     ret = ::read(m_fd, _data, _count);
     if (ret != _count) {
-        return Error::CreateError("[I2C]Error in ReadBytes: Received %d bytes from device(expected %d)", ret, _count);
+        return Result::CreateError("[I2C]Error in ReadBytes: Received %d bytes from device(expected %d)", ret, _count);
     }
 
-    return Error::CreateNoError();
+    return Result::CreateSuccess();
 }
 
 ///////////////////////////////////////////////////////////
 /// @brief  Read single word from i2c device
 /// @param[in]  _regAddr Register address
 /// @param[out] _data Read data
-/// @return common_library::Error
+/// @return common_library::types::Result
 /// @note
 ///////////////////////////////////////////////////////////
-common_library::Error I2C::ReadWord(uint8_t _regAddr, uint16_t* _data)
+common_library::types::Result I2C::ReadWord(uint8_t _regAddr, uint16_t* _data)
 {
     return ReadWords(_regAddr, 1, _data);
 }
@@ -148,26 +150,26 @@ common_library::Error I2C::ReadWord(uint8_t _regAddr, uint16_t* _data)
 /// @param[in]  _regAddr Register address
 /// @param[in]  _count Number of words to read
 /// @param[out] _data Read data
-/// @return common_library::Error
+/// @return common_library::types::Result
 /// @note
 ///////////////////////////////////////////////////////////
-common_library::Error I2C::ReadWords(uint8_t _regAddr, size_t _count, uint16_t* _data)
+common_library::types::Result I2C::ReadWords(uint8_t _regAddr, size_t _count, uint16_t* _data)
 {
     if (!IsOpen()) {
-        return Error::CreateError("[I2C]Error in ReadWords: Device hasn't open yet");
+        return Result::CreateError("[I2C]Error in ReadWords: Device hasn't open yet");
     }
     
     // Write register to device
     int ret = ::write(m_fd, &_regAddr, 1);
     if (ret != 1) {
-        return Error::CreateError("[I2C]Error in ReadWords: Failed to write to i2c device");
+        return Result::CreateError("[I2C]Error in ReadWords: Failed to write to i2c device");
     }
 
     // Then read the response
     char buf[_count*2];
     ret = read(m_fd, buf, _count*2);
     if (ret != (signed)(_count*2)) {
-        return Error::CreateError("[I2C]Error in ReadWords: Received %d bytes from device(expected %d)", ret, _count);
+        return Result::CreateError("[I2C]Error in ReadWords: Received %d bytes from device(expected %d)", ret, _count);
     }
 
     // Formate words from bytes and put into user's data array
@@ -175,20 +177,20 @@ common_library::Error I2C::ReadWords(uint8_t _regAddr, size_t _count, uint16_t* 
         _data[i] = (((uint16_t)buf[i*2])<<8 | buf[(i*2)+1]);
     }
 
-    return Error::CreateNoError();
+    return Result::CreateSuccess();
 }
 
 ///////////////////////////////////////////////////////////
 /// @brief  Write a single byte to i2c device
 /// @param[in]  _regAddr Register address
 /// @param[in]  _data Byte to be writen
-/// @return common_library::Error
+/// @return common_library::types::Result
 /// @note
 ///////////////////////////////////////////////////////////
-common_library::Error I2C::WriteByte(uint8_t _regAddr, uint8_t _data)
+common_library::types::Result I2C::WriteByte(uint8_t _regAddr, uint8_t _data)
 {
     if (!IsOpen()) {
-        return Error::CreateError("[I2C]Error in WriteByte: Device hasn't open yet");
+        return Result::CreateError("[I2C]Error in WriteByte: Device hasn't open yet");
     }
 
     // Assemble array to send, starting with the register address
@@ -199,10 +201,10 @@ common_library::Error I2C::WriteByte(uint8_t _regAddr, uint8_t _data)
     // Write the bytes
     int ret = ::write(m_fd, writeData, 2);
     if (ret != 2) {
-        return Error::CreateError("[I2C]Error in WriteByte: Wrote %d bytes to device(expected 2)", ret);
+        return Result::CreateError("[I2C]Error in WriteByte: Wrote %d bytes to device(expected 2)", ret);
     }
     
-    return Error::CreateNoError();
+    return Result::CreateSuccess();
 }
 
 ///////////////////////////////////////////////////////////
@@ -210,13 +212,13 @@ common_library::Error I2C::WriteByte(uint8_t _regAddr, uint8_t _data)
 /// @param[in]  _regAddr Register address
 /// @param[in]  _data Bytes to be writen
 /// @param[in]  _count Number of bytes to be writen
-/// @return common_library::Error
+/// @return common_library::types::Result
 /// @note
 ///////////////////////////////////////////////////////////
-common_library::Error I2C::WriteBytes(uint8_t _regAddr, const uint8_t* _data, size_t _count)
+common_library::types::Result I2C::WriteBytes(uint8_t _regAddr, const uint8_t* _data, size_t _count)
 {
     if (!IsOpen()) {
-        return Error::CreateError("[I2C]Error in WriteBytes: Device hasn't open yet");
+        return Result::CreateError("[I2C]Error in WriteBytes: Device hasn't open yet");
     }
 
     uint8_t writeData[_count+1];
@@ -230,23 +232,23 @@ common_library::Error I2C::WriteBytes(uint8_t _regAddr, const uint8_t* _data, si
     // send the bytes
     int ret = ::write(m_fd, writeData, _count+1);
     if (ret != (signed)(_count+1)) {
-        return Error::CreateError("[I2C]Error in WriteBytes: Write returned %d (expected %d)", ret, _count);
+        return Result::CreateError("[I2C]Error in WriteBytes: Write returned %d (expected %d)", ret, _count);
     }
 
-    return Error::CreateNoError();
+    return Result::CreateSuccess();
 }
 
 ///////////////////////////////////////////////////////////
 /// @brief  Write a single word to i2c device
 /// @param[in]  _regAddr Register address
 /// @param[in]  _data word to be writen
-/// @return common_library::Error
+/// @return common_library::types::Result
 /// @note
 ///////////////////////////////////////////////////////////
-common_library::Error I2C::WriteWord(uint8_t _regAddr, uint16_t _data)
+common_library::types::Result I2C::WriteWord(uint8_t _regAddr, uint16_t _data)
 {
     if (!IsOpen()) {
-        return Error::CreateError("[I2C]Error in WriteWord: Device hasn't open yet");
+        return Result::CreateError("[I2C]Error in WriteWord: Device hasn't open yet");
     }
     
     uint8_t writeData[3];
@@ -258,10 +260,10 @@ common_library::Error I2C::WriteWord(uint8_t _regAddr, uint16_t _data)
 
     int ret = ::write(m_fd, writeData, 3);
     if (ret != 3) {
-        return Error::CreateError("[I2C]Error in WriteWord: Write returned %d (expected 3)", ret);
+        return Result::CreateError("[I2C]Error in WriteWord: Write returned %d (expected 3)", ret);
     }
     
-    return Error::CreateNoError();
+    return Result::CreateSuccess();
 }
 
 ///////////////////////////////////////////////////////////
@@ -269,13 +271,13 @@ common_library::Error I2C::WriteWord(uint8_t _regAddr, uint16_t _data)
 /// @param[in]  _regAddr Register address
 /// @param[in]  _data Words to be writen
 /// @param[in]  _count Number of words to be writen
-/// @return common_library::Error
+/// @return common_library::types::Result
 /// @note
 ///////////////////////////////////////////////////////////
-common_library::Error I2C::WriteWords(uint8_t _regAddr, const uint16_t* _data, size_t _count)
+common_library::types::Result I2C::WriteWords(uint8_t _regAddr, const uint16_t* _data, size_t _count)
 {
     if (!IsOpen()) {
-        return Error::CreateError("[I2C]Error in WriteWords: Device hasn't open yet");
+        return Result::CreateError("[I2C]Error in WriteWords: Device hasn't open yet");
     }
 
     uint8_t writeData[(_count*2)+1];
@@ -289,19 +291,19 @@ common_library::Error I2C::WriteWords(uint8_t _regAddr, const uint16_t* _data, s
 
     int ret = ::write(m_fd, writeData, (_count*2)+1);
     if (ret != (signed)(_count*2)+1) {
-        return Error::CreateError("[I2C]Error in WriteWords: Write returned %d (expected %d)", ret, (_count*2)+1);
+        return Result::CreateError("[I2C]Error in WriteWords: Write returned %d (expected %d)", ret, (_count*2)+1);
     }
     
-    return Error::CreateNoError();
+    return Result::CreateSuccess();
 }
 
 ///////////////////////////////////////////////////////////
 /// @brief  Send a single byte to i2c device
 /// @param[in]  _data Byte to be send
-/// @return common_library::Error
+/// @return common_library::types::Result
 /// @note
 ///////////////////////////////////////////////////////////
-common_library::Error I2C::SendByte(uint8_t _data)
+common_library::types::Result I2C::SendByte(uint8_t _data)
 {
     return SendBytes(&_data, 1);
 }
@@ -310,13 +312,13 @@ common_library::Error I2C::SendByte(uint8_t _data)
 /// @brief  Send multiple bytes to i2c device
 /// @param[in]  _data Bytes to be send
 /// @param[in]  _count Number of bytes to be send
-/// @return common_library::Error
+/// @return common_library::types::Result
 /// @note
 ///////////////////////////////////////////////////////////
-common_library::Error I2C::SendBytes(const uint8_t* _data, size_t _count)
+common_library::types::Result I2C::SendBytes(const uint8_t* _data, size_t _count)
 {
     if (!IsOpen()) {
-        return Error::CreateError("[I2C]Error in SendBytes: Device hasn't open yet");
+        return Result::CreateError("[I2C]Error in SendBytes: Device hasn't open yet");
     }
 
     // Send the bytes
@@ -324,10 +326,10 @@ common_library::Error I2C::SendBytes(const uint8_t* _data, size_t _count)
 
     // Write should have returned the correct # bytes written
     if (ret != (signed)_count){
-        return Error::CreateError("[I2C]Error in SendBytes: Received %d bytes from device(expected %d)", ret, _count);
+        return Result::CreateError("[I2C]Error in SendBytes: Received %d bytes from device(expected %d)", ret, _count);
     }
 
-    return Error::CreateNoError();
+    return Result::CreateSuccess();
 }
 } // namespace io
 } // namespace common_library

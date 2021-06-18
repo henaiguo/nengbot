@@ -7,7 +7,7 @@
 #ifndef LCD_MONITOR_H
 #define LCD_MONITOR_H
 
-#include <lcd_monitor/ilcd_control.h>
+#include <lcd_monitor/i_lcd_control.h>
 #include <common_library/types/ebasic_state.h>
 
 #include <ros/ros.h>

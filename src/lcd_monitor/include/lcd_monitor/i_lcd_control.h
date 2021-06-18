@@ -7,7 +7,7 @@
 #ifndef I_LCD_CONTROL_H
 #define I_LCD_CONTROL_H
 
-#include <common_library/error.h>
+#include <common_library/types/result.h>
 #include <string>
 
 namespace lcd_monitor {

@@ -7,7 +7,7 @@
 #ifndef LCD1602_H
 #define LCD1602_H
 
-#include <lcd_monitor/ilcd_control.h>
+#include <lcd_monitor/i_lcd_control.h>
 #include <common_library/io/i2c.h>
 
 namespace lcd_monitor {

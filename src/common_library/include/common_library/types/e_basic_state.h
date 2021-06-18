@@ -5,8 +5,8 @@
 /// Copyright (C) 2021- henaiguo. All rights reserved.
 ///////////////////////////////////////////////////////////
 
-#ifndef EBAISC_STATE_H
-#define EBAISC_STATE_H
+#ifndef E_BAISC_STATE_H
+#define E_BAISC_STATE_H
 
 #include <string>
 
@@ -96,4 +96,4 @@ static bool ToEnum(int _value, eBasicState& _enum)
 } // namespace types
 } // namespace common_library
 
-#endif // EBAISC_STATE_H
+#endif // E_BAISC_STATE_H
