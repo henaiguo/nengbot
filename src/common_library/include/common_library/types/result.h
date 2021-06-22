@@ -8,7 +8,7 @@
 #ifndef RESULT_H
 #define RESULT_H
 
-#include <e_result.h>
+#include <common_library/types/e_result.h>
 
 namespace common_library {
 namespace types {

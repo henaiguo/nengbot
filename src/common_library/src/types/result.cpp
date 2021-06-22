@@ -5,7 +5,7 @@
 /// Copyright (C) 2021- henaiguo All rights reserved.
 ///////////////////////////////////////////////////////////
 
-#include "result.h"
+#include <common_library/types/result.h>
 
 #include <cstdio>
 #include <cstdarg>

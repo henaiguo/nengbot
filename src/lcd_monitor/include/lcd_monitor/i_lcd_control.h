@@ -20,10 +20,10 @@ class ILCDControl {
 public:
     ///////////////////////////////////////////////////////////
     /// @brief  Initialize
-    /// @return common_library::Error
+    /// @return common_library::types::Result
     /// @note
     ///////////////////////////////////////////////////////////
-    virtual common_library::Error Initialize() = 0;
+    virtual common_library::types::Result Initialize() = 0;
 
     ///////////////////////////////////////////////////////////
     /// @brief  Finalize
@@ -36,10 +36,10 @@ public:
     /// @brief  Display message on screen
     /// @param[in]  _msg Message to display
     /// @param[in]  _line line number to display
-    /// @return common_library::Error
+    /// @return common_library::types::Result
     /// @note
     ///////////////////////////////////////////////////////////
-    virtual common_library::Error Display(std::string _msg, int _line) = 0;
+    virtual common_library::types::Result Display(std::string _msg, int _line) = 0;
 
     ///////////////////////////////////////////////////////////
     /// @brief  Clear screen

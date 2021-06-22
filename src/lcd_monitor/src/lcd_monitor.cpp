@@ -12,7 +12,6 @@
 #include <sstream>
 
 using namespace common_library::types;
-using namespace common_library;
 
 namespace lcd_monitor {
 ///////////////////////////////////////////////////////////
@@ -43,9 +42,9 @@ LCDMonitor::~LCDMonitor()
 ///////////////////////////////////////////////////////////
 bool LCDMonitor::Initialize()
 {
-    Error error = m_lcdControl->Initialize();
-    if (error) {
-        ROS_ERROR("%s", error.Message().c_str());
+    Result result = m_lcdControl->Initialize();
+    if (!result) {
+        ROS_ERROR("%s", result.GetErrorMessage().c_str());
         return false;
     }
 
@@ -88,13 +87,16 @@ void LCDMonitor::basicStateCallback(const neng_msgs::BasicState::ConstPtr& _mess
 bool LCDMonitor::displayCurrentState(common_library::types::eBasicState _state)
 {
     std::string state = ToString(_state);
-    if (state == "INVALID_ENUM_VALUE") return false;
+    if (state == "INVALID_ENUM_VALUE") {
+        ROS_ERROR("Invalid basic state");
+        return false;
+    }
 
     ROS_INFO("current basic state: %s", state.c_str());
     m_lcdControl->Clear();
-    Error error = m_lcdControl->Display(state.c_str(), 1);
-    if (error) {
-        ROS_ERROR("%s", error.Message().c_str());
+    Result result = m_lcdControl->Display(state.c_str(), 1);
+    if (!result) {
+        ROS_ERROR("%s", result.GetErrorMessage().c_str());
         return false;
     }
     return true;

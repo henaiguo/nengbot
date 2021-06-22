@@ -8,7 +8,7 @@
 #define LCD_MONITOR_H
 
 #include <lcd_monitor/i_lcd_control.h>
-#include <common_library/types/ebasic_state.h>
+#include <common_library/types/e_basic_state.h>
 
 #include <ros/ros.h>
 #include <neng_msgs/BasicState.h>
