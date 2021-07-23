@@ -7,15 +7,14 @@
 
 #include <gtest/gtest.h>
 #include <common_library/types/result.h>
+#include <common_library/types/e_result.h>
 
 using common_library::types::result;
-
-namespace common_library {
-namespace types {
+using common_library::types::eResult;
 
 TEST(Result, CreateSucess)
 {
-    Result result = ::CreateSuccess();
+    Result result = Result::CreateSuccess();
     EXPECT_TRUE(result);
     EXPECT_EQ(result, eSuccess);
     EXPECT_EQ(result.GetResult(), eSuccess);
@@ -27,7 +26,7 @@ TEST(Result, CreateSucess)
 
 TEST(Result, CreateError)
 {
-    Result result = ::CreateError("Error test");
+    Result result = Result::CreateError("Error test");
     EXPECT_False(result);
     EXPECT_EQ(result, eError);
     EXPECT_EQ(result.GetResult(), eError);
@@ -121,6 +120,3 @@ TEST(Result, ErrorToSuccess)
     EXPECT_FALSE(result.HasErrorMessage());
     EXPECT_STREQ(result.GetErrorMessage().c_str(), "");
 }
-
-} // namespace types
-} // namespace common_library
