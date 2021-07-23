@@ -9,15 +9,15 @@
 #include <common_library/types/result.h>
 #include <common_library/types/e_result.h>
 
-using common_library::types::result;
+using common_library::types::Result;
 using common_library::types::eResult;
 
 TEST(Result, CreateSucess)
 {
     Result result = Result::CreateSuccess();
     EXPECT_TRUE(result);
-    EXPECT_EQ(result, eSuccess);
-    EXPECT_EQ(result.GetResult(), eSuccess);
+    EXPECT_EQ(result, eSUCCESS);
+    EXPECT_EQ(result.GetResult(), eSUCCESS);
     EXPECT_TRUE(result.IsSuccess());
     EXPECT_FALSE(result.IsError());
     EXPECT_FALSE(result.HasErrorMessage());
@@ -27,9 +27,9 @@ TEST(Result, CreateSucess)
 TEST(Result, CreateError)
 {
     Result result = Result::CreateError("Error test");
-    EXPECT_False(result);
-    EXPECT_EQ(result, eError);
-    EXPECT_EQ(result.GetResult(), eError);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(result, eERROR);
+    EXPECT_EQ(result.GetResult(), eERROR);
     EXPECT_FALSE(result.IsSuccess());
     EXPECT_TRUE(result.IsError());
     EXPECT_TRUE(result.HasErrorMessage());
@@ -38,10 +38,10 @@ TEST(Result, CreateError)
 
 TEST(Result, ResultSuccess)
 {
-    Result result(eSuccess);
+    Result result(eSUCCESS);
     EXPECT_TRUE(result);
-    EXPECT_EQ(result, eSuccess);
-    EXPECT_EQ(result.GetResult(), eSuccess);
+    EXPECT_EQ(result, eSUCCESS);
+    EXPECT_EQ(result.GetResult(), eSUCCESS);
     EXPECT_TRUE(result.IsSuccess());
     EXPECT_FALSE(result.IsError());
     EXPECT_FALSE(result.HasErrorMessage());
@@ -50,10 +50,10 @@ TEST(Result, ResultSuccess)
 
 TEST(Result, ResultSuccessWithErrorMessage)
 {
-    Result result(eSuccess, "Error test");
+    Result result(eSUCCESS, "Error test");
     EXPECT_TRUE(result);
-    EXPECT_EQ(result, eSuccess);
-    EXPECT_EQ(result.GetResult(), eSuccess);
+    EXPECT_EQ(result, eSUCCESS);
+    EXPECT_EQ(result.GetResult(), eSUCCESS);
     EXPECT_TRUE(result.IsSuccess());
     EXPECT_FALSE(result.IsError());
     EXPECT_FALSE(result.HasErrorMessage());
@@ -61,10 +61,10 @@ TEST(Result, ResultSuccessWithErrorMessage)
 }
 
 TEST(Result, ResultError) { 
-    Result result(eError);
-    EXPECT_False(result);
-    EXPECT_EQ(result, eError);
-    EXPECT_EQ(result.GetResult(), eError);
+    Result result(eERROR);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(result, eERROR);
+    EXPECT_EQ(result.GetResult(), eERROR);
     EXPECT_FALSE(result.IsSuccess());
     EXPECT_TRUE(result.IsError());
     EXPECT_FALSE(result.HasErrorMessage());
@@ -77,10 +77,10 @@ TEST(Result, ResultError) {
 
 TEST(Result, ResultErrorWithErrorMessage)
 {
-    Result result(eError, "Error test");
-    EXPECT_False(result);
-    EXPECT_EQ(result, eError);
-    EXPECT_EQ(result.GetResult(), eError);
+    Result result(eERROR, "Error test");
+    EXPECT_FALSE(result);
+    EXPECT_EQ(result, eERROR);
+    EXPECT_EQ(result.GetResult(), eERROR);
     EXPECT_FALSE(result.IsSuccess());
     EXPECT_TRUE(result.IsError());
     EXPECT_TRUE(result.HasErrorMessage());
@@ -97,11 +97,11 @@ TEST(Result, ResultErrorWithErrorMessage)
 
 TEST(Result, SuccessToError)
 {
-    Result result(eSuccess);
-    result.SetResult(eError);
-    EXPECT_False(result);
-    EXPECT_EQ(result, eError);
-    EXPECT_EQ(result.GetResult(), eError);
+    Result result(eSUCCESS);
+    result.SetResult(eERROR);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(result, eERROR);
+    EXPECT_EQ(result.GetResult(), eERROR);
     EXPECT_TRUE(result.IsError());
     EXPECT_TRUE(result.IsError());
     EXPECT_FALSE(result.HasErrorMessage());
@@ -110,11 +110,11 @@ TEST(Result, SuccessToError)
 
 TEST(Result, ErrorToSuccess)
 {
-    Result result(eError, "Error Test");
-    result.SetResult(eSuccess);
+    Result result(eERROR, "Error Test");
+    result.SetResult(eSUCCESS);
     EXPECT_TRUE(result);
-    EXPECT_EQ(result, eSuccess);
-    EXPECT_EQ(result.GetResult(), eSuccess);
+    EXPECT_EQ(result, eSUCCESS);
+    EXPECT_EQ(result.GetResult(), eSUCCESS);
     EXPECT_TRUE(result.IsSuccess());
     EXPECT_FALSE(result.IsError());
     EXPECT_FALSE(result.HasErrorMessage());
