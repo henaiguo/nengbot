@@ -211,7 +211,7 @@ add_dependencies(common_library_i2c common_library_result)
 ## Add gtest based cpp test target and link libraries
 catkin_add_gtest(${PROJECT_NAME}-test test/main_test.cpp test/result_test.cpp)
 if(TARGET ${PROJECT_NAME}-test)
-  target_link_libraries(${PROJECT_NAME}-test common_library_result})
+  target_link_libraries(${PROJECT_NAME}-test common_library_result)
 endif()
 
 ## Add folders to be run by python nosetests

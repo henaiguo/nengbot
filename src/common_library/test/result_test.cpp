@@ -88,7 +88,7 @@ TEST(Result, ResultErrorWithErrorMessage)
     EXPECT_STREQ(result.GetErrorMessage().c_str(), "Error test");
 
     result.SetErrorMessage("Error new test");
-    EXPECT_FALSE(result.HasErrorMessage());
+    EXPECT_TRUE(result.HasErrorMessage());
     EXPECT_STREQ(result.GetErrorMessage().c_str(), "Error new test");
 
     result.SetErrorMessage("");
