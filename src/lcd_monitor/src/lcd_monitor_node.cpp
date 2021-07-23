@@ -8,7 +8,7 @@
 #include <lcd_monitor/lcd_monitor.h>
 #include <ros/ros.h>
 
-using namespace lcd_monitor;
+using lcd_monitor::LCDMonitor;
 
 int main(int argc, char** argv)
 {

@@ -10,7 +10,8 @@
 #include <unistd.h>
 #include <iostream>
 
-using namespace common_library::types;
+using common_library::types::Result;
+using common_library::io::I2C;
 
 namespace lcd_monitor {
 /// Device name

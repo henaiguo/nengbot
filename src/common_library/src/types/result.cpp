@@ -11,8 +11,6 @@
 #include <cstdarg>
 #include <cstring>
 
-using common_library::types::Result;
-
 namespace common_library {
 namespace types {
 ///////////////////////////////////////////////////////////

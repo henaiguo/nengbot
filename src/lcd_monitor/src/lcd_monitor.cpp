@@ -11,7 +11,8 @@
 
 #include <sstream>
 
-using namespace common_library::types;
+using common_library::types::Result;
+using common_library::types::eBasicState;
 
 namespace lcd_monitor {
 ///////////////////////////////////////////////////////////
