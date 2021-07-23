@@ -10,7 +10,8 @@
 #include <common_library/types/e_result.h>
 
 using common_library::types::Result;
-using common_library::types::eResult;
+
+using namespace common_library::types;
 
 TEST(Result, CreateSucess)
 {
@@ -70,7 +71,7 @@ TEST(Result, ResultError) {
     EXPECT_FALSE(result.HasErrorMessage());
     EXPECT_STREQ(result.GetErrorMessage().c_str(), "");
 
-    reslt.SetErrorMessage("Error test");
+    result.SetErrorMessage("Error test");
     EXPECT_TRUE(result.HasErrorMessage());
     EXPECT_STREQ(result.GetErrorMessage().c_str(), "Error test");
 }
@@ -86,11 +87,11 @@ TEST(Result, ResultErrorWithErrorMessage)
     EXPECT_TRUE(result.HasErrorMessage());
     EXPECT_STREQ(result.GetErrorMessage().c_str(), "Error test");
 
-    reslt.SetErrorMessage("Error new test");
+    result.SetErrorMessage("Error new test");
     EXPECT_FALSE(result.HasErrorMessage());
     EXPECT_STREQ(result.GetErrorMessage().c_str(), "Error new test");
 
-    reslt.SetErrorMessage("");
+    result.SetErrorMessage("");
     EXPECT_FALSE(result.HasErrorMessage());
     EXPECT_STREQ(result.GetErrorMessage().c_str(), "");
 }
