@@ -1,113 +1,126 @@
+///////////////////////////////////////////////////////////
+/// @file	result_test.cpp
+/// @brief	unit test for result
+/// @author	henaiguo
+/// Copyright (C) 2021- henaiguo All rights reserved.
+///////////////////////////////////////////////////////////
+
 #include <gtest/gtest.h>
 #include <common_library/types/result.h>
 
 using common_library::types::result;
 
-TEST_F(Result, CreateSucess)
+namespace common_library {
+namespace types {
+
+TEST(Result, CreateSucess)
 {
     Result result = ::CreateSuccess();
-    ASSERT_TRUE(result);
-    ASSERT_EQ(result, eSuccess);
-    ASSERT_EQ(result.GetResult(), eSuccess);
-    ASSERT_TRUE(result.IsSuccess());
-    ASSERT_FALSE(result.IsError());
-    ASSERT_FALSE(result.HasErrorMessage());
-    ASSERT_STREQ(result.GetErrorMessage().c_str(), "");
+    EXPECT_TRUE(result);
+    EXPECT_EQ(result, eSuccess);
+    EXPECT_EQ(result.GetResult(), eSuccess);
+    EXPECT_TRUE(result.IsSuccess());
+    EXPECT_FALSE(result.IsError());
+    EXPECT_FALSE(result.HasErrorMessage());
+    EXPECT_STREQ(result.GetErrorMessage().c_str(), "");
 }
 
-TEST_F(Result, CreateError)
+TEST(Result, CreateError)
 {
     Result result = ::CreateError("Error test");
-    ASSERT_False(result);
-    ASSERT_EQ(result, eError);
-    ASSERT_EQ(result.GetResult(), eError);
-    ASSERT_FALSE(result.IsSuccess());
-    ASSERT_TRUE(result.IsError());
-    ASSERT_TRUE(result.HasErrorMessage());
-    ASSERT_STREQ(result.GetErrorMessage().c_str(), "Error test");
+    EXPECT_False(result);
+    EXPECT_EQ(result, eError);
+    EXPECT_EQ(result.GetResult(), eError);
+    EXPECT_FALSE(result.IsSuccess());
+    EXPECT_TRUE(result.IsError());
+    EXPECT_TRUE(result.HasErrorMessage());
+    EXPECT_STREQ(result.GetErrorMessage().c_str(), "Error test");
 }
 
-TEST_F(Result, ResultSuccess)
+TEST(Result, ResultSuccess)
 {
     Result result(eSuccess);
-    ASSERT_TRUE(result);
-    ASSERT_EQ(result, eSuccess);
-    ASSERT_EQ(result.GetResult(), eSuccess);
-    ASSERT_TRUE(result.IsSuccess());
-    ASSERT_FALSE(result.IsError());
-    ASSERT_FALSE(result.HasErrorMessage());
-    ASSERT_STREQ(result.GetErrorMessage().c_str(), "");
+    EXPECT_TRUE(result);
+    EXPECT_EQ(result, eSuccess);
+    EXPECT_EQ(result.GetResult(), eSuccess);
+    EXPECT_TRUE(result.IsSuccess());
+    EXPECT_FALSE(result.IsError());
+    EXPECT_FALSE(result.HasErrorMessage());
+    EXPECT_STREQ(result.GetErrorMessage().c_str(), "");
 }
 
-TEST_F(Result, ResultSuccessWithErrorMessage)
+TEST(Result, ResultSuccessWithErrorMessage)
 {
     Result result(eSuccess, "Error test");
-    ASSERT_TRUE(result);
-    ASSERT_EQ(result, eSuccess);
-    ASSERT_EQ(result.GetResult(), eSuccess);
-    ASSERT_TRUE(result.IsSuccess());
-    ASSERT_FALSE(result.IsError());
-    ASSERT_FALSE(result.HasErrorMessage());
-    ASSERT_STREQ(result.GetErrorMessage().c_str(), "");
+    EXPECT_TRUE(result);
+    EXPECT_EQ(result, eSuccess);
+    EXPECT_EQ(result.GetResult(), eSuccess);
+    EXPECT_TRUE(result.IsSuccess());
+    EXPECT_FALSE(result.IsError());
+    EXPECT_FALSE(result.HasErrorMessage());
+    EXPECT_STREQ(result.GetErrorMessage().c_str(), "");
 }
 
-TEST_F(Result, ResultError) { 
+TEST(Result, ResultError) { 
     Result result(eError);
-    ASSERT_False(result);
-    ASSERT_EQ(result, eError);
-    ASSERT_EQ(result.GetResult(), eError);
-    ASSERT_FALSE(result.IsSuccess());
-    ASSERT_TRUE(result.IsError());
-    ASSERT_FALSE(result.HasErrorMessage());
-    ASSERT_STREQ(result.GetErrorMessage().c_str(), "");
+    EXPECT_False(result);
+    EXPECT_EQ(result, eError);
+    EXPECT_EQ(result.GetResult(), eError);
+    EXPECT_FALSE(result.IsSuccess());
+    EXPECT_TRUE(result.IsError());
+    EXPECT_FALSE(result.HasErrorMessage());
+    EXPECT_STREQ(result.GetErrorMessage().c_str(), "");
 
     reslt.SetErrorMessage("Error test");
-    ASSERT_TRUE(result.HasErrorMessage());
-    ASSERT_STREQ(result.GetErrorMessage().c_str(), "Error test");
+    EXPECT_TRUE(result.HasErrorMessage());
+    EXPECT_STREQ(result.GetErrorMessage().c_str(), "Error test");
 }
 
-TEST_F(Result, ResultErrorWithErrorMessage)
+TEST(Result, ResultErrorWithErrorMessage)
 {
     Result result(eError, "Error test");
-    ASSERT_False(result);
-    ASSERT_EQ(result, eError);
-    ASSERT_EQ(result.GetResult(), eError);
-    ASSERT_FALSE(result.IsSuccess());
-    ASSERT_TRUE(result.IsError());
-    ASSERT_TRUE(result.HasErrorMessage());
-    ASSERT_STREQ(result.GetErrorMessage().c_str(), "Error test");
+    EXPECT_False(result);
+    EXPECT_EQ(result, eError);
+    EXPECT_EQ(result.GetResult(), eError);
+    EXPECT_FALSE(result.IsSuccess());
+    EXPECT_TRUE(result.IsError());
+    EXPECT_TRUE(result.HasErrorMessage());
+    EXPECT_STREQ(result.GetErrorMessage().c_str(), "Error test");
 
     reslt.SetErrorMessage("Error new test");
-    ASSERT_FALSE(result.HasErrorMessage());
-    ASSERT_STREQ(result.GetErrorMessage().c_str(), "Error new test");
+    EXPECT_FALSE(result.HasErrorMessage());
+    EXPECT_STREQ(result.GetErrorMessage().c_str(), "Error new test");
 
     reslt.SetErrorMessage("");
-    ASSERT_FALSE(result.HasErrorMessage());
-    ASSERT_STREQ(result.GetErrorMessage().c_str(), "");
+    EXPECT_FALSE(result.HasErrorMessage());
+    EXPECT_STREQ(result.GetErrorMessage().c_str(), "");
 }
 
-TEST_F(Result, SuccessToError)
+TEST(Result, SuccessToError)
 {
     Result result(eSuccess);
     result.SetResult(eError);
-    ASSERT_False(result);
-    ASSERT_EQ(result, eError);
-    ASSERT_EQ(result.GetResult(), eError);
-    ASSERT_TRUE(result.IsError());
-    ASSERT_TRUE(result.IsError());
-    ASSERT_FALSE(result.HasErrorMessage());
-    ASSERT_STREQ(result.GetErrorMessage().c_str(), "");
+    EXPECT_False(result);
+    EXPECT_EQ(result, eError);
+    EXPECT_EQ(result.GetResult(), eError);
+    EXPECT_TRUE(result.IsError());
+    EXPECT_TRUE(result.IsError());
+    EXPECT_FALSE(result.HasErrorMessage());
+    EXPECT_STREQ(result.GetErrorMessage().c_str(), "");
 }
 
-TEST_F(Result, ErrorToSuccess)
+TEST(Result, ErrorToSuccess)
 {
     Result result(eError, "Error Test");
     result.SetResult(eSuccess);
-    ASSERT_TRUE(result);
-    ASSERT_EQ(result, eSuccess);
-    ASSERT_EQ(result.GetResult(), eSuccess);
-    ASSERT_TRUE(result.IsSuccess());
-    ASSERT_FALSE(result.IsError());
-    ASSERT_FALSE(result.HasErrorMessage());
-    ASSERT_STREQ(result.GetErrorMessage().c_str(), "");
+    EXPECT_TRUE(result);
+    EXPECT_EQ(result, eSuccess);
+    EXPECT_EQ(result.GetResult(), eSuccess);
+    EXPECT_TRUE(result.IsSuccess());
+    EXPECT_FALSE(result.IsError());
+    EXPECT_FALSE(result.HasErrorMessage());
+    EXPECT_STREQ(result.GetErrorMessage().c_str(), "");
 }
+
+} // namespace types
+} // namespace common_library
