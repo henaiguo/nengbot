@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////
-/// @file   lcd1602.cpp
+/// @file   lcd_1602.cpp
 /// @brief  lcd1602 display based on pcf8574 through i2c
 /// @author henaiguo
 /// Copyright (C) 2021- henaiguo. All rights reserved.

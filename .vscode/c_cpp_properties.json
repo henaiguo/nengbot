@@ -3,6 +3,8 @@
         {
             "name": "Win32",
             "includePath": [
+                "/usr/include/**",
+                "/opt/ros/melodic/include/**",
                 "${workspaceFolder}/**"
             ],
             "defines": [
