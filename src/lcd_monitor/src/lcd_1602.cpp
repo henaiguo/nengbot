@@ -70,9 +70,7 @@ namespace lcd_monitor {
 
 /// Register select bit
 #define Rs 0B00000001
-} // namespace lcd_monitor
 
-namespace lcd_monitor {
 ///////////////////////////////////////////////////////////
 /// @brief  Default constructor
 /// @return None
@@ -101,9 +99,7 @@ LCD1602::~LCD1602()
 ///////////////////////////////////////////////////////////
 common_library::types::Result LCD1602::Initialize()
 {
-    Result result;
-
-    result = m_i2c.Open(LCD_I2C_DEVICE_NAME, LCD_I2C_DEVICE_ADDRESS);
+    Result result = m_i2c.Open(LCD_I2C_DEVICE_NAME, LCD_I2C_DEVICE_ADDRESS);
     if (!result) return result;
 
     // Set lcd1602 to 4 bits mode
@@ -128,7 +124,7 @@ common_library::types::Result LCD1602::Initialize()
 
     ::usleep(200);
 
-    return result;
+    return Result::CreateSuccess();
 }
 
 ///////////////////////////////////////////////////////////
@@ -171,7 +167,7 @@ common_library::types::Result LCD1602::Display(std::string _msg, int _line)
         if (!result) return result;
     }
 
-    return result;
+    return Result::CreateSuccess();
 }
 
 ///////////////////////////////////////////////////////////
@@ -211,15 +207,10 @@ void LCD1602::Backlight(bool _onoff)
 ///////////////////////////////////////////////////////////
 common_library::types::Result LCD1602::i2cWriteCommand(uint8_t _command)
 {
-    Result result;
-
-    result = i2cSend4Bits(_command & 0xF0);
+    Result result = i2cSend4Bits(_command & 0xF0);
     if (!result) return result;
 
-    result = i2cSend4Bits((_command << 4) & 0xF0);
-    if (!result) return result;
-
-    return result;
+    return i2cSend4Bits((_command << 4) & 0xF0);
 }
 
 ///////////////////////////////////////////////////////////
@@ -235,10 +226,7 @@ common_library::types::Result LCD1602::i2cWriteChar(char _data)
     result = i2cSend4Bits(Rs | ((uint8_t)_data & 0xF0));
     if (!result) return result;
 
-    result = i2cSend4Bits(Rs | (((uint8_t)_data << 4) & 0xF0));
-    if (!result) return result;
-
-    return result;
+    return i2cSend4Bits(Rs | (((uint8_t)_data << 4) & 0xF0));
 }
 
 ///////////////////////////////////////////////////////////
@@ -254,10 +242,7 @@ common_library::types::Result LCD1602::i2cSend4Bits(uint8_t _data)
     result = i2cSendByte(_data);
     if (!result) return result;
 
-    result = i2cPlusEnable(_data);
-    if (!result) return result;
-
-    return result;
+    return i2cPlusEnable(_data);
 }
 
 ///////////////////////////////////////////////////////////
@@ -278,7 +263,7 @@ common_library::types::Result LCD1602::i2cPlusEnable(uint8_t _data)
     if (!result) return result;
     ::usleep(50);
 
-    return result;
+    return Result::CreateSuccess();
 }
 
 ///////////////////////////////////////////////////////////
@@ -293,6 +278,6 @@ common_library::types::Result LCD1602::i2cSendByte(uint8_t _byte)
     if (!result) return result;
     
     ::usleep(1000); // 1ms
-    return result;
+    return Result::CreateSuccess();
 }
 } // namespace lcd_monitor

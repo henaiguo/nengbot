@@ -37,14 +37,14 @@ public:
     /// @return common_library::types::Result
     /// @note
     ///////////////////////////////////////////////////////////
-    virtual common_library::types::Result Initialize();
+    common_library::types::Result Initialize();
 
     ///////////////////////////////////////////////////////////
     /// @brief  Finalize
     /// @return None
     /// @note
     ///////////////////////////////////////////////////////////
-    virtual void Finalize();
+    void Finalize();
 
     ///////////////////////////////////////////////////////////
     /// @brief  Set actuator position
@@ -52,7 +52,7 @@ public:
     /// @return common_library::types::Result
     /// @note
     ///////////////////////////////////////////////////////////
-    virtual common_library::types::Result SetActuatorPosition(/*TODO*/);
+    common_library::types::Result SetActuatorPosition(/*TODO*/);
 
     ///////////////////////////////////////////////////////////
     /// @brief  Set actuator positions
@@ -60,11 +60,18 @@ public:
     /// @return common_library::types::Result
     /// @note
     ///////////////////////////////////////////////////////////
-    virtual common_library::types::Result SetActuatorPositions(/*TODO*/);
+    common_library::types::Result SetActuatorPositions(/*TODO*/);
 
 private:
     /// i2c driver
     common_library::io::I2C m_i2c;
+
+    ///////////////////////////////////////////////////////////
+    /// @brief  reset lcd1602
+    /// @return common_library::types::Result
+    /// @note
+    ///////////////////////////////////////////////////////////
+    common_library::types::Result reset();
 
     ///////////////////////////////////////////////////////////
     /// @brief  Send PWM frequency through i2c to pca9685
@@ -77,6 +84,15 @@ private:
     ///////////////////////////////////////////////////////////
     /// @brief  Send PWM through i2c to pca9685
     /// @param[in]  _channel Channel 1-16
+    /// @param[in]  __value 0-4095 value for PWM
+    /// @return common_library::types::Result
+    /// @note
+    ///////////////////////////////////////////////////////////
+    common_library::types::Result setPWM(uint8_t _channel, int _value);
+
+    ///////////////////////////////////////////////////////////
+    /// @brief  Send PWM through i2c to pca9685
+    /// @param[in]  _channel Channel 1-16
     /// @param[in]  _on 0-4095 value to turn on the pulse
     /// @param[in]  _off 0-4095 value to turn off the pulse
     /// @return common_library::types::Result
@@ -85,12 +101,13 @@ private:
     common_library::types::Result setPWM(uint8_t _channel, int _on, int _off);
 
     ///////////////////////////////////////////////////////////
-    /// @brief  Send 4 bits through i2c to lcd1602
+    /// @brief  Get current PWM value
     /// @param[in]  _channel Channel 1-16
-    /// @return int
+    /// @param[out]  _value PWM value
+    /// @return int common_library::types::Result
     /// @note
     ///////////////////////////////////////////////////////////
-    int getPWM(uint8_t _channel);
+    common_library::types::Result getPWM(uint8_t _channel, int& _value);
 };
 } // namespace motor_controller
 
