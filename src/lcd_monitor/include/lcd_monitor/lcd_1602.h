@@ -9,6 +9,7 @@
 
 #include <lcd_monitor/i_lcd_control.h>
 #include <common_library/io/i2c.h>
+#include <common_library/types/result.h>
 
 namespace lcd_monitor {
 ///////////////////////////////////////////////////////////
